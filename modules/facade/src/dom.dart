@@ -52,6 +52,9 @@ class DOM {
     t.setInnerHtml(html, treeSanitizer:identitySanitizer);
     return t;
   }
+  static createElement(tagName) {
+    return document.createElement(tagName);
+  }
   static clone(Node node) {
     return node.clone(true);
   }

@@ -45,6 +45,9 @@ export class DOM {
     t.innerHTML = html;
     return t;
   }
+  static createElement(tagName) {
+    return document.createElement(tagName);
+  }
   static clone(node:Node) {
     return node.cloneNode(true);
   }
