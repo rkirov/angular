@@ -29,14 +29,17 @@ export class ViewPort {
     this.hostElementInjector = null;
   }
 
-  attach(appInjector: Injector, hostElementInjector: ElementInjector) {
+  hydrate(appInjector: Injector, hostElementInjector: ElementInjector) {
     this.appInjector = appInjector;
     this.hostElementInjector = hostElementInjector;
   }
 
-  detach() {
+  dehydrate() {
     this.appInjector = null;
     this.hostElementInjector = null;
+    for (var i = 0; i < this._views.length; i++) {
+      this.remove(i);
+    }
   }
 
   get(index: number): View {
@@ -52,19 +55,18 @@ export class ViewPort {
     return ListWrapper.last(this._views[index - 1].nodes);
   }
 
-  get detached() {
-    return isBlank(this.appInjector);
+  hydrated() {
+    return isPresent(this.appInjector);
   }
 
   // TODO(rado): profile and decide whether bounds checks should be added
   // to the methods below.
   create(atIndex=-1): View {
-    if (this.detached) throw new BaseException(
-        'Cannot create views on a detached view port');
-    // TODO(rado): replace curried defaultProtoView.instantiate(appInjector,
-    // hostElementInjector) with ViewFactory.
-    var newView = this.defaultProtoView.instantiate(
-        null, this.appInjector, this.hostElementInjector);
+    if (!this.hydrated()) throw new BaseException(
+        'Cannot create views on a dehydrated view port');
+    // TODO(rado): replace with viewFactory.
+    var newView = this.defaultProtoView.instantiate(this.hostElementInjector);
+    newView.hydrate(this.appInjector, this.hostElementInjector, this.parentView.context);
     return this.insert(newView, atIndex);
   }
 
