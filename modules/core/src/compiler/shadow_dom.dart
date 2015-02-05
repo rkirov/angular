@@ -7,3 +7,5 @@ export './shadow_dom_strategy.dart';
 
 const ShadowDomEmulated = const EmulatedShadowDomStrategy();
 const ShadowDomNative = const NativeShadowDomStrategy();
+const ShadowDomComponentOnlyEmulated = const ComponentOnlyEmulatedShadowDomStrategy();
+const ShadowDomAutoDetect = const AutoDetectShadowDomStrategy();

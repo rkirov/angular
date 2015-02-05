@@ -12,6 +12,10 @@ export class ShadowDomStrategy {
   polyfillDirectives():List<Type>{ return null; };
 }
 
+/**
+ * Emulate <content> tag light dom inclusion in the shadow dom and CSS
+ * encapsulation.
+ */
 export class EmulatedShadowDomStrategy extends ShadowDomStrategy {
   @CONST() constructor() {}
   attachTemplate(el:Element, view:View){
@@ -28,7 +32,49 @@ export class EmulatedShadowDomStrategy extends ShadowDomStrategy {
   }
 }
 
+/**
+ * Emulate only <content> tag light dom inclusion in the shadow dom.
+ */
+export class ComponentOnlyEmulatedShadowDomStrategy extends ShadowDomStrategy {
+  @CONST() constructor() {}
+  attachTemplate(el:Element, view:View){
+    DOM.clearNodes(el);
+    moveViewNodesIntoParent(el, view);
+  }
+
+  constructLightDom(lightDomView:View, shadowDomView:View, el:Element){
+    return new LightDom(lightDomView, shadowDomView, el);
+  }
+
+  polyfillDirectives():List<Type> {
+    return [Content];
+  }
+}
+
+/**
+ * Use native shadow dom APIs. When used in a browser that does not support
+ * them, this strategy will throw.
+ */
 export class NativeShadowDomStrategy extends ShadowDomStrategy {
+  @CONST() constructor() {}
+  attachTemplate(el:Element, view:View){
+    moveViewNodesIntoParent(el.createShadowRoot(), view);
+  }
+
+  constructLightDom(lightDomView:View, shadowDomView:View, el:Element){
+    return null;
+  }
+
+  polyfillDirectives():List<Type> {
+    return [];
+  }
+}
+
+/**
+ * Use NativeShadowDomStrategy when available, otherwise fallback to
+ * EmulatedShadowDomStrategy.
+ */
+export class AutoDetectShadowDomStrategy extends ShadowDomStrategy {
   @CONST() constructor() {}
   attachTemplate(el:Element, view:View){
     moveViewNodesIntoParent(el.createShadowRoot(), view);

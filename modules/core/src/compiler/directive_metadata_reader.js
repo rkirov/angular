@@ -3,7 +3,7 @@ import {List, ListWrapper} from 'facade/src/collection';
 import {Directive, Component} from '../annotations/annotations';
 import {DirectiveMetadata} from './directive_metadata';
 import {reflector} from 'reflection/src/reflection';
-import {ShadowDom, ShadowDomStrategy, ShadowDomNative} from './shadow_dom';
+import {ShadowDom, ShadowDomStrategy, ShadowDomNative, ShadowDomEmulated} from './shadow_dom';
 
 export class DirectiveMetadataReader {
   read(type:Type):DirectiveMetadata {
@@ -31,7 +31,7 @@ export class DirectiveMetadataReader {
   }
 
   parseShadowDomStrategy(annotation:Component):ShadowDomStrategy{
-    return isPresent(annotation.shadowDom) ? annotation.shadowDom : ShadowDomNative;
+    return isPresent(annotation.shadowDom) ? annotation.shadowDom : ShadowDomEmulated;
   }
 
   componentDirectivesMetadata(annotation:Component, shadowDomStrategy:ShadowDomStrategy):List<Type> {
