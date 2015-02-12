@@ -63,7 +63,12 @@ export class DOM {
     return res;
   }
   static clearNodes(el) {
-    el.innerHTML = "";
+    var childNode = DOM.firstChild(el);
+    while (childNode != null) {
+      var node = childNode;
+      childNode = DOM.nextSibling(childNode);
+      el.removeChild(node);
+    }
   }
   static appendChild(el, node) {
     el.appendChild(node);

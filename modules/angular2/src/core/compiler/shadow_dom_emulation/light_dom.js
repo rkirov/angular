@@ -39,10 +39,13 @@ export class LightDom {
     this.roots = null;
   }
 
-  redistribute() {
+  redistribute(view, callback=null) {
     var tags = this.contentTags();
     if (tags.length > 0) {
-      redistributeNodes(tags, this.expandedDomNodes());
+      view.addToWriteQueue(() => {
+        redistributeNodes(tags, this.expandedDomNodes());
+        if (callback) callback();
+      });
     }
   }
 

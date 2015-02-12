@@ -184,7 +184,9 @@ export class View {
       if (isPresent(componentDirective)) {
         var lightDom = this.preBuiltObjects[i].lightDom;
         if (isPresent(lightDom)) {
-          lightDom.redistribute();
+          this.addToWriteQueue(() => {
+            lightDom.redistribute();
+          });
         }
       }
     }
@@ -268,19 +270,8 @@ export class View {
     return changes;
   }
 
-  addToReadQueue(f) {
-    ListWrapper.push(this._domReadQueue, f);
-  }
-
   addToWriteQueue(f) {
     ListWrapper.push(this._domWriteQueue, f);
-  }
-
-  _runReadQueue() {
-    for (var i = 0; i < this._domReadQueue.length; i++) {
-      this._domReadQueue[i]();
-    }
-    this._domReadQueue = [];
   }
 
   _runWriteQueue() {
@@ -290,27 +281,23 @@ export class View {
     this._domWriteQueue = [];
   }
 
-  runReadQueueDown() {
-    this._visitRecursive((v) => v._runReadQueue());
-  }
-
   runWriteQueueDown() {
-    this._visitRecursive((v) => v._runWriteQueue());
+    this._visitRecursive();
   }
 
   // Views are traversed in post-order depth-first traversal.
   // TODO(rado): replace with ES6 generator once we can transpile them to dart.
-  _visitRecursive(f) {
+  _visitRecursive() {
     for (var i = 0; i < this.componentChildViews.length; i++) {
-      this.componentChildViews[i]._visitRecursive(f);
+      this.componentChildViews[i]._visitRecursive();
     }
     for (var i = 0; i < this.viewPorts.length; i++) {
       var viewport = this.viewPorts[i];
       for (var j = 0; j < viewport.length; j++) {
-        viewport.get(j)._visitRecursive(f);
+        viewport.get(j)._visitRecursive();
       }
     }
-    f(this);
+    this._runWriteQueue();
   }
 
 }

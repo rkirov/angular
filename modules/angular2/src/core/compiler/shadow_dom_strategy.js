@@ -68,7 +68,9 @@ export class NativeShadowDomStrategy extends ShadowDomStrategy {
 }
 
 function moveViewNodesIntoParent(parent, view) {
-  for (var i = 0; i < view.nodes.length; ++i) {
-    DOM.appendChild(parent, view.nodes[i]);
-  }
+  view.addToWriteQueue(() => {
+    for (var i = 0; i < view.nodes.length; ++i) {
+      DOM.appendChild(parent, view.nodes[i]);
+    }
+  });
 }

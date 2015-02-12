@@ -63,7 +63,12 @@ class DOM {
   static List<Node> childNodes(Node el) => el.childNodes;
   static List childNodesAsList(Node el) => childNodes(el).toList();
   static void clearNodes(Node el) {
-    el.nodes = const [];
+    var childNode = DOM.firstChild(el);
+    while (childNode != null) {
+      var node = childNode;
+      childNode = DOM.nextSibling(childNode);
+      node.remove();
+    }
   }
   static void appendChild(Node el, Node node) {
     el.append(node);

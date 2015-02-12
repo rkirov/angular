@@ -84,7 +84,7 @@ export class ViewPort {
         ViewPort.moveViewNodesAfterSibling(sibling, view);
       })
     } else {
-      this._lightDom.redistribute();
+      this._lightDom.redistribute(this.parentView);
     }
     this.parentView.changeDetector.addChild(view.changeDetector);
     this._linkElementInjectors(view);
@@ -112,7 +112,9 @@ export class ViewPort {
         if (returnToPool) this.defaultProtoView.returnToPool(detachedView);
       });
     } else {
-      this._lightDom.redistribute();
+      this._lightDom.redistribute(this.parentView, () => {
+        if (returnToPool) this.defaultProtoView.returnToPool(detachedView);
+      });
     }
     detachedView.changeDetector.remove();
     this._unlinkElementInjectors(detachedView);

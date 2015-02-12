@@ -12,7 +12,7 @@ import {List, ListWrapper} from 'angular2/src/facade/collection';
 import {PromiseWrapper} from 'angular2/src/facade/async';
 import {VmTurnZone} from 'angular2/src/core/zone/vm_turn_zone';
 import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
-import {ShadowDomStrategy, NativeShadowDomStrategy} from 'angular2/src/core/compiler/shadow_dom_strategy';
+import {ShadowDomStrategy, NativeShadowDomStrategy, EmulatedShadowDomStrategy} from 'angular2/src/core/compiler/shadow_dom_strategy';
 import {XHR} from 'angular2/src/core/compiler/xhr/xhr';
 import {XHRImpl} from 'angular2/src/core/compiler/xhr/xhr_impl';
 
@@ -28,7 +28,7 @@ var _rootBindings = [
   DirectiveMetadataReader,
   Parser,
   Lexer,
-  bind(ShadowDomStrategy).toValue(new NativeShadowDomStrategy()),
+  bind(ShadowDomStrategy).toValue(new EmulatedShadowDomStrategy()),
   bind(XHR).toValue(new XHRImpl()),
 ];
 

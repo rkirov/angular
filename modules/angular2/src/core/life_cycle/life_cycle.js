@@ -42,11 +42,6 @@ export class LifeCycle {
     if (this._enforceNoNewChanges) {
       this._changeDetector.checkNoChanges();
     }
-    this._runDomQueues();
-  }
-
-  _runDomQueues() {
     this._rootView.runWriteQueueDown();
-    this._rootView.runReadQueueDown();
   }
 }
