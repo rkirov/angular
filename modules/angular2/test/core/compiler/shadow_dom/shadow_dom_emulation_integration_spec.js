@@ -48,6 +48,7 @@ export function main() {
             then(createView).
             then((view) => {
               var lc = new LifeCycle(view.changeDetector, false);
+              lc.setRootView(view);
               assertions(view, lc);
             });
         }

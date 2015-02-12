@@ -25,6 +25,12 @@ export function main() {
       cd = view.changeDetector;
     }
 
+    function tick() {
+      cd.detectChanges();
+      view.runReadQueueDown();
+      view.runWriteQueueDown();
+    }
+
     function compileWithTemplate(template) {
       return compiler.compile(TestComponent, el(template));
     }
@@ -33,7 +39,7 @@ export function main() {
       var template = '<div>{{text}}<span non-bindable>{{text}}</span></div>';
       compileWithTemplate(template).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('foo{{text}}');
         done();
       });
@@ -43,7 +49,7 @@ export function main() {
       var template = '<div non-bindable><span id=child test-dec>{{text}}</span></div>';
       compileWithTemplate(template).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
         var span = DOM.querySelector(view.nodes[0], '#child');
         expect(DOM.hasClass(span, 'compiled')).toBeFalsy();
         done();
@@ -54,7 +60,7 @@ export function main() {
       var template = '<div><span id=child non-bindable test-dec>{{text}}</span></div>';
       compileWithTemplate(template).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
         var span = DOM.querySelector(view.nodes[0], '#child');
         expect(DOM.hasClass(span, 'compiled')).toBeTruthy();
         done();

@@ -111,8 +111,9 @@ export function bootstrap(appComponentType: Type, bindings=null, givenBootstrapE
     PromiseWrapper.then(appInjector.asyncGet(appViewToken),
       (rootView) => {
         // retrieve life cycle: may have already been created if injected in root component
-        var lc=appInjector.get(LifeCycle); 
+        var lc = appInjector.get(LifeCycle);
         lc.registerWith(zone, rootView.changeDetector);
+        lc.setRootView(rootView);
         lc.tick(); //the first tick that will bootstrap the app
 
         bootstrapProcess.complete(appInjector);

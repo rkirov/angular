@@ -3,10 +3,12 @@ import {ChangeDetector} from 'angular2/change_detection';
 import {VmTurnZone} from 'angular2/src/core/zone/vm_turn_zone';
 import {ListWrapper} from 'angular2/src/facade/collection';
 import {isPresent} from 'angular2/src/facade/lang';
+import {View} from 'angular2/src/core/compiler/view';
 
 export class LifeCycle {
   _changeDetector:ChangeDetector;
   _enforceNoNewChanges:boolean;
+  _rootView: View;
 
   constructor(changeDetector:ChangeDetector = null, enforceNoNewChanges:boolean = false) {
     this._changeDetector = changeDetector; // may be null when instantiated from application bootstrap
@@ -22,7 +24,7 @@ export class LifeCycle {
     };
 
     if (isPresent(changeDetector)) {
-      this._changeDetector=changeDetector;
+      this._changeDetector = changeDetector;
     }
 
     zone.initCallbacks({
@@ -31,10 +33,20 @@ export class LifeCycle {
     });
   }
 
+  setRootView(view: View) {
+    this._rootView = view;
+  }
+
   tick() {
     this._changeDetector.detectChanges();
     if (this._enforceNoNewChanges) {
       this._changeDetector.checkNoChanges();
     }
+    this._runDomQueues();
+  }
+
+  _runDomQueues() {
+    this._rootView.runWriteQueueDown();
+    this._rootView.runReadQueueDown();
   }
 }

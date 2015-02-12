@@ -88,6 +88,12 @@ export function main() {
       changeDetector = view.changeDetector;
     }
 
+    function tick() {
+      changeDetector.detectChanges();
+      view.runReadQueueDown();
+      view.runWriteQueueDown();
+    }
+
     it('should not create an ElementBinder for elements that have no bindings', () => {
       var pipeline = createPipeline();
       var results = pipeline.process(el('<div viewroot><span></span></div>'));
@@ -171,7 +177,7 @@ export function main() {
       instantiateView(pv);
       evalContext.prop1 = 'a';
       evalContext.prop2 = 'b';
-      changeDetector.detectChanges();
+      tick();
 
       expect(view.nodes[0].childNodes[0].nodeValue).toEqual('a');
       expect(view.nodes[0].childNodes[2].nodeValue).toEqual('b');
@@ -191,7 +197,7 @@ export function main() {
       instantiateView(pv);
       evalContext.prop1 = 'a';
       evalContext.prop2 = false;
-      changeDetector.detectChanges();
+      tick();
 
       expect(view.nodes[0].value).toEqual('a');
       expect(view.nodes[0].hidden).toEqual(false);
@@ -210,11 +216,11 @@ export function main() {
       instantiateView(pv);
 
       evalContext.prop1 = true;
-      changeDetector.detectChanges();
+      tick();
       expect(view.nodes[0].className).toEqual('foo ng-binding bar');
 
       evalContext.prop1 = false;
-      changeDetector.detectChanges();
+      tick();
       expect(view.nodes[0].className).toEqual('foo ng-binding');
     });
 
@@ -231,11 +237,11 @@ export function main() {
       instantiateView(pv);
 
       evalContext.prop1 = 'red';
-      changeDetector.detectChanges();
+      tick();
       expect(view.nodes[0].style.color).toEqual('red');
 
       evalContext.prop1 = 'blue';
-      changeDetector.detectChanges();
+      tick();
       expect(view.nodes[0].style.color).toEqual('blue');
     });
 
@@ -252,15 +258,15 @@ export function main() {
       instantiateView(pv);
 
       evalContext.prop1 = 10;
-      changeDetector.detectChanges();
+      tick();
       expect(DOM.getStyle(view.nodes[0], 'font-size')).toEqual('10px');
 
       evalContext.prop1 = 20;
-      changeDetector.detectChanges();
+      tick();
       expect(DOM.getStyle(view.nodes[0], 'font-size')).toEqual('20px');
 
       evalContext.prop1 = null;
-      changeDetector.detectChanges();
+      tick();
       expect(DOM.getStyle(view.nodes[0], 'font-size')).toEqual('');
     });
 
@@ -300,7 +306,7 @@ export function main() {
       evalContext.prop1 = 'a';
       evalContext.prop2 = 'b';
       evalContext.prop3 = 'c';
-      changeDetector.detectChanges();
+      tick();
 
       expect(view.elementInjectors[0].get(SomeDecoratorDirectiveWith2Bindings).decorProp).toBe('a');
       expect(view.elementInjectors[0].get(SomeDecoratorDirectiveWith2Bindings).decorProp2).toBe('b');
@@ -326,7 +332,7 @@ export function main() {
 
       instantiateView(pv);
       evalContext.prop1 = 'a';
-      changeDetector.detectChanges();
+      tick();
 
       expect(view.elementInjectors[1].get(SomeDecoratorDirectiveWithBinding).decorProp).toBe('a');
     });
@@ -338,7 +344,7 @@ export function main() {
       var results = pipeline.process(el('<div viewroot directives boundprop1="foo"></div>'));
       var pv = results[0].inheritedProtoView;
       instantiateView(pv);
-      changeDetector.detectChanges();
+      tick();
 
       expect(view.elementInjectors[0].get(SomeDecoratorDirectiveWithBinding).decorProp).toEqual('foo');
     });

@@ -79,7 +79,10 @@ export class ViewPort {
     if (atIndex == -1) atIndex = this._views.length;
     ListWrapper.insert(this._views, atIndex, view);
     if (isBlank(this._lightDom)) {
-      ViewPort.moveViewNodesAfterSibling(this._siblingToInsertAfter(atIndex), view);
+      var sibling = this._siblingToInsertAfter(atIndex);
+      this.parentView.addToWriteQueue(() => {
+        ViewPort.moveViewNodesAfterSibling(sibling, view);
+      })
     } else {
       this._lightDom.redistribute();
     }
@@ -90,10 +93,8 @@ export class ViewPort {
 
   remove(atIndex=-1) {
     if (atIndex == -1) atIndex = this._views.length - 1;
-    var view = this.detach(atIndex);
+    var view = this.detach(atIndex, true);
     view.dehydrate();
-    // TODO(rado): this needs to be delayed until after any pending animations.
-    this.defaultProtoView.returnToPool(view);
     // view is intentionally not returned to the client.
   }
 
@@ -101,12 +102,15 @@ export class ViewPort {
    * The method can be used together with insert to implement a view move, i.e.
    * moving the dom nodes while the directives in the view stay intact.
    */
-  detach(atIndex=-1): View {
+  detach(atIndex=-1, returnToPool=false): View {
     if (atIndex == -1) atIndex = this._views.length - 1;
     var detachedView = this.get(atIndex);
     ListWrapper.removeAt(this._views, atIndex);
     if (isBlank(this._lightDom)) {
-      ViewPort.removeViewNodesFromParent(this.templateElement.parentNode, detachedView);
+      this.parentView.addToWriteQueue(() => {
+        ViewPort.removeViewNodesFromParent(this.templateElement.parentNode, detachedView);
+        if (returnToPool) this.defaultProtoView.returnToPool(detachedView);
+      });
     } else {
       this._lightDom.redistribute();
     }

@@ -41,12 +41,18 @@ export function main() {
         cd = view.changeDetector;
       }
 
+      function tick() {
+        cd.detectChanges();
+        view.runReadQueueDown();
+        view.runWriteQueueDown();
+      }
+
       it('should consume text node changes', (done) => {
         compiler.compile(MyComp, el('<div>{{ctxProp}}</div>')).then((pv) => {
           createView(pv);
           ctx.ctxProp = 'Hello World!';
 
-          cd.detectChanges();
+          tick();
           expect(DOM.getInnerHTML(view.nodes[0])).toEqual('Hello World!');
           done();
         });
@@ -57,7 +63,7 @@ export function main() {
           createView(pv);
 
           ctx.ctxProp = 'Hello World!';
-          cd.detectChanges();
+          tick();
 
           expect(view.nodes[0].id).toEqual('Hello World!');
           done();
@@ -76,7 +82,7 @@ export function main() {
           createView(pv);
 
           ctx.ctxProp = 'Hello World!';
-          cd.detectChanges();
+          tick();
 
           expect(view.elementInjectors[0].get(MyDir).dirProp).toEqual('Hello World!');
           expect(view.elementInjectors[1].get(MyDir).dirProp).toEqual('Hi there!');
@@ -90,7 +96,7 @@ export function main() {
         compiler.compile(MyComp, el('<child-cmp></child-cmp>')).then((pv) => {
           createView(pv);
 
-          cd.detectChanges();
+          tick();
 
           expect(view.nodes[0].shadowRoot.childNodes[0].nodeValue).toEqual('hello');
           done();
@@ -103,7 +109,7 @@ export function main() {
           createView(pv);
 
           ctx.ctxProp = 'Hello World!';
-          cd.detectChanges();
+          tick();
 
           var elInj = view.elementInjectors[0];
           expect(elInj.get(MyDir).dirProp).toEqual('Hello World!');
@@ -117,7 +123,7 @@ export function main() {
         compiler.compile(MyComp, el('<div><template some-tmplate var-greeting="some-tmpl"><copy-me>{{greeting}}</copy-me></template></div>')).then((pv) => {
           createView(pv);
 
-          cd.detectChanges();
+          tick();
 
           var childNodesOfWrapper = view.nodes[0].childNodes;
           // 1 template + 2 copies.
@@ -132,7 +138,7 @@ export function main() {
         compiler.compile(MyComp, el('<div><copy-me template="some-tmplate: var greeting=some-tmpl">{{greeting}}</copy-me></div>')).then((pv) => {
           createView(pv);
 
-          cd.detectChanges();
+          tick();
 
           var childNodesOfWrapper = view.nodes[0].childNodes;
           // 1 template + 2 copies.

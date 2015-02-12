@@ -84,6 +84,8 @@ export function main() {
 
     describe('when hydrated', () => {
       function textInViewPort() {
+        viewPort.parentView.runWriteQueueDown();
+
         var out = '';
         // skipping starting filler, insert-me and final filler.
         for (var i = 2; i < dom.childNodes.length - 1; i++) {

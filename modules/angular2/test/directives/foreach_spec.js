@@ -31,6 +31,12 @@ export function main() {
       cd = view.changeDetector;
     }
 
+    function tick() {
+      cd.detectChanges();
+      view.runReadQueueDown();
+      view.runWriteQueueDown();
+    }
+
     function compileWithTemplate(template) {
       return compiler.compile(TestComponent, el(template));
     }
@@ -40,7 +46,7 @@ export function main() {
     it('should reflect initial elements', (done) => {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('1;2;');
         done();
@@ -50,10 +56,10 @@ export function main() {
     it('should reflect added elements', (done) => {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
 
         ListWrapper.push(component.items, 3);
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('1;2;3;');
         done();
@@ -63,10 +69,10 @@ export function main() {
     it('should reflect removed elements', (done) => {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
 
         ListWrapper.removeAt(component.items, 1);
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('1;');
         done();
@@ -76,11 +82,11 @@ export function main() {
     it('should reflect moved elements', (done) => {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
 
         ListWrapper.removeAt(component.items, 0);
         ListWrapper.push(component.items, 1);
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('2;1;');
         done();
@@ -91,10 +97,10 @@ export function main() {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
         component.items = [0, 1, 2, 3, 4, 5];
-        cd.detectChanges();
+        tick();
 
         component.items = [6, 2, 7, 0, 4, 8];
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('6;2;7;0;4;8;');
         done();
@@ -107,19 +113,19 @@ export function main() {
 
         // INIT
         component.items = [{'name': 'misko'}, {'name':'shyam'}];
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('misko;shyam;');
 
         // GROW
         ListWrapper.push(component.items, {'name': 'adam'});
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('misko;shyam;adam;');
 
         // SHRINK
         ListWrapper.removeAt(component.items, 2);
         ListWrapper.removeAt(component.items, 0);
-        cd.detectChanges();
+        tick();
 
         expect(DOM.getText(view.nodes[0])).toEqual('shyam;');
       });
@@ -128,7 +134,7 @@ export function main() {
     it('should gracefully handle nulls', (done) => {
       compileWithTemplate('<ul><li template="foreach #item in null">{{item}};</li></ul>').then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('');
         done();
       });
@@ -137,15 +143,15 @@ export function main() {
     it('should gracefully handle ref changing to null and back', (done) => {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('1;2;');
 
         component.items = null;
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('');
 
         component.items = [1, 2, 3];
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('1;2;3;');
         done();
       });
@@ -154,11 +160,11 @@ export function main() {
     it('should throw on ref changing to string', (done) => {
       compileWithTemplate(TEMPLATE).then((pv) => {
         createView(pv);
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('1;2;');
 
         component.items = 'whaaa';
-        expect(() => cd.detectChanges()).toThrowError();
+        expect(() => tick()).toThrowError();
         done();
       });
     });
@@ -168,7 +174,7 @@ export function main() {
         createView(pv);
         var a = new Foo();
         component.items = [a, a];
-        cd.detectChanges();
+        tick();
         expect(DOM.getText(view.nodes[0])).toEqual('foo;foo;');
         done();
       });
@@ -183,9 +189,10 @@ export function main() {
     ).then((pv) => {
       createView(pv);
       component.items = [['a', 'b'], ['c','d']];
-      cd.detectChanges();
-      cd.detectChanges();
-      cd.detectChanges();
+      tick();
+      tick();
+      tick();
+
       expect(DOM.getText(view.nodes[0])).toEqual('a;b;|c;d;|');
       done();
     });
@@ -198,11 +205,11 @@ export function main() {
     compileWithTemplate(INDEX_TEMPLATE).then((pv) => {
       createView(pv);
       component.items = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      cd.detectChanges();
+      tick();
       expect(DOM.getText(view.nodes[0])).toEqual('0123456789');
 
       component.items = [1, 2, 6, 7, 4, 3, 5, 8, 9, 0];
-      cd.detectChanges();
+      tick();
       expect(DOM.getText(view.nodes[0])).toEqual('0123456789');
       done();
     });

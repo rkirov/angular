@@ -24,6 +24,12 @@ export function main() {
       cd = view.changeDetector;
     }
 
+    function tick() {
+      cd.detectChanges();
+      view.runWriteQueueDown();
+      view.runReadQueueDown();
+    }
+
     function compileWithTemplate(template) {
       return compiler.compile(TestComponent, el(template));
     }
@@ -37,15 +43,15 @@ export function main() {
           '</ul></div>';
         compileWithTemplate(template).then((pv) => {
           createView(pv);
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('');
 
           component.switchValue = 'a';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when a');
 
           component.switchValue = 'b';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when b');
 
           done();
@@ -60,15 +66,15 @@ export function main() {
           '</ul></div>';
         compileWithTemplate(template).then((pv) => {
           createView(pv);
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when default');
 
           component.switchValue = 'a';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when a');
 
           component.switchValue = 'b';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when default');
 
           done();
@@ -87,15 +93,15 @@ export function main() {
           '</ul></div>';
         compileWithTemplate(template).then((pv) => {
           createView(pv);
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when default1;when default2;');
 
           component.switchValue = 'a';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when a1;when a2;');
 
           component.switchValue = 'b';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when b1;when b2;');
 
           done();
@@ -117,23 +123,23 @@ export function main() {
           component.when1 = 'a';
           component.when2 = 'b';
           component.switchValue = 'a';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when 1;');
 
           component.switchValue = 'b';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when 2;');
 
           component.switchValue = 'c';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when default;');
 
           component.when1 = 'c';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when 1;');
 
           component.when1 = 'd';
-          cd.detectChanges();
+          tick();
           expect(DOM.getText(view.nodes[0])).toEqual('when default;');
 
           done();

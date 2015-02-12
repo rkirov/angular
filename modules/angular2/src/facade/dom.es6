@@ -85,7 +85,11 @@ export class DOM {
     });
   }
   static insertAfter(el, node) {
-    el.parentNode.insertBefore(node, el.nextSibling);
+    if (el.nextSibling) {
+      el.parentNode.insertBefore(node, el.nextSibling);
+    } else {
+      el.parentNode.appendChild(node);
+    }
   }
   static setInnerHTML(el, value) {
     el.innerHTML = value;

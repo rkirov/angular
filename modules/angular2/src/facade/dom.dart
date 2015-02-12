@@ -81,7 +81,11 @@ class DOM {
     el.parentNode.insertAllBefore(nodes, el);
   }
   static void insertAfter(Node el, Node node) {
-    el.parentNode.insertBefore(node, el.nextNode);
+    if (el.nextNode != null) {
+      el.parentNode.insertBefore(node, el.nextNode);
+    } else {
+      el.parentNode.append(node);
+    }
   }
   static String getText(Node el) => el.text;
   static void setText(Node el, String value) {

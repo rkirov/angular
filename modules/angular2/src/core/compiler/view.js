@@ -46,6 +46,9 @@ export class View {
   proto: ProtoView;
   context: any;
   contextWithLocals:ContextWithVariableBindings;
+  _domReadQueue;
+  _domWriteQueue;
+  _runningQueue;
 
   constructor(proto:ProtoView, nodes:List<Node>, protoChangeDetector:ProtoChangeDetector, protoContextLocals:Map) {
     this.proto = proto;
@@ -59,6 +62,8 @@ export class View {
     this.viewPorts = null;
     this.preBuiltObjects = null;
     this.context = null;
+    this._domReadQueue = [];
+    this._domWriteQueue = [];
     this.contextWithLocals = (MapWrapper.size(protoContextLocals) > 0)
       ? new ContextWithVariableBindings(null, MapWrapper.clone(protoContextLocals))
       : null;
@@ -246,7 +251,10 @@ export class View {
     } else {
       // we know it refers to _textNodes.
       var textNodeIndex:number = memento;
-      DOM.setText(this.textNodes[textNodeIndex], record.currentValue);
+      var value = record.currentValue;
+      this.addToWriteQueue(() => {
+        DOM.setText(this.textNodes[textNodeIndex], value);
+      });
     }
   }
 
@@ -259,6 +267,52 @@ export class View {
     }
     return changes;
   }
+
+  addToReadQueue(f) {
+    ListWrapper.push(this._domReadQueue, f);
+  }
+
+  addToWriteQueue(f) {
+    ListWrapper.push(this._domWriteQueue, f);
+  }
+
+  _runReadQueue() {
+    for (var i = 0; i < this._domReadQueue.length; i++) {
+      this._domReadQueue[i]();
+    }
+    this._domReadQueue = [];
+  }
+
+  _runWriteQueue() {
+    for (var i = 0; i < this._domWriteQueue.length; i++) {
+      this._domWriteQueue[i]();
+    }
+    this._domWriteQueue = [];
+  }
+
+  runReadQueueDown() {
+    this._visitRecursive((v) => v._runReadQueue());
+  }
+
+  runWriteQueueDown() {
+    this._visitRecursive((v) => v._runWriteQueue());
+  }
+
+  // Views are traversed in post-order depth-first traversal.
+  // TODO(rado): replace with ES6 generator once we can transpile them to dart.
+  _visitRecursive(f) {
+    for (var i = 0; i < this.componentChildViews.length; i++) {
+      this.componentChildViews[i]._visitRecursive(f);
+    }
+    for (var i = 0; i < this.viewPorts.length; i++) {
+      var viewport = this.viewPorts[i];
+      for (var j = 0; j < viewport.length; j++) {
+        viewport.get(j)._visitRecursive(f);
+      }
+    }
+    f(this);
+  }
+
 }
 
 export class ProtoView {

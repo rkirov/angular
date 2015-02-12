@@ -41,19 +41,24 @@ class FakeView {
 
 export function main() {
   describe('view', function() {
-    var parser, someComponentDirective, someTemplateDirective;
+    var parser, someComponentDirective, someTemplateDirective, log;
 
     function createView(protoView) {
       var ctx = new MyEvaluationContext();
       var view = protoView.instantiate(null);
-      view.hydrate(null, null, ctx);
+      view.hydrate(new Injector([]), null, ctx);
       return view;
+    }
+
+    function logCallback(text) {
+      return () => { log += `${text} `; }
     }
 
     beforeEach(() => {
       parser = new Parser(new Lexer());
       someComponentDirective = new DirectiveMetadataReader().read(SomeComponent);
       someTemplateDirective = new DirectiveMetadataReader().read(SomeTemplate);
+      log = '';
     });
 
     describe('instantiated from protoView', () => {
@@ -405,12 +410,26 @@ export function main() {
           expect(view.nodes[0].childNodes[0].childNodes[0].nodeValue).toEqual('hello shadow dom');
         });
 
+        it('component dom write queues are traversed before parent', () => {
+          var subpv = new ProtoView(el('<span>hello</span>'),
+            new DynamicProtoChangeDetector(),
+            null);
+          var pv = createComponentWithSubPV(subpv);
+          var view = createNestedView(pv);
+
+          view.addToWriteQueue(logCallback('1'));
+          view.componentChildViews[0].addToWriteQueue(logCallback('2'));
+
+          view.runWriteQueueDown();
+
+          expect(log).toEqual('2 1 ');
+        });
       });
 
       describe('with template views', () => {
         function createViewWithTemplate() {
           var templateProtoView = new ProtoView(
-            el('<div id="1"></div>'), new DynamicProtoChangeDetector(), null);
+            el('<template id="1"></template>'), new DynamicProtoChangeDetector(), null);
           var pv = new ProtoView(el('<someTmpl class="ng-binding"></someTmpl>'),
             new DynamicProtoChangeDetector(), new NativeShadowDomStrategy());
           var binder = pv.bindElement(new ProtoElementInjector(null, 0, [SomeTemplate]));
@@ -429,9 +448,25 @@ export function main() {
 
         it('dehydration should dehydrate viewports', () => {
           var view = createViewWithTemplate();
+          var tmplComp = view.rootElementInjectors[0].get(SomeTemplate);
+
+          view.dehydrate();
+
+          expect(tmplComp.viewPort.hydrated()).toBe(false);
+        });
+
+        it('viewport views\' dom write queues run before parent', () => {
+          var view = createViewWithTemplate();
 
           var tmplComp = view.rootElementInjectors[0].get(SomeTemplate);
-          expect(tmplComp.viewPort.hydrated()).toBe(false);
+          tmplComp.viewPort.create();
+
+          view.addToWriteQueue(logCallback('1'));
+          tmplComp.viewPort.get(0).addToWriteQueue(logCallback('2'));
+
+          view.runWriteQueueDown();
+
+          expect(log).toEqual('2 1 ');
         });
       });
 
@@ -520,6 +555,12 @@ export function main() {
           cd = view.changeDetector;
         }
 
+        function tick() {
+          cd.detectChanges();
+          view.runReadQueueDown();
+          view.runWriteQueueDown();
+        }
+
         it('should consume text node changes', () => {
           var pv = new ProtoView(el('<div class="ng-binding">{{}}</div>'),
             new DynamicProtoChangeDetector(), null);
@@ -528,7 +569,7 @@ export function main() {
           createViewAndChangeDetector(pv);
 
           ctx.foo = 'buz';
-          cd.detectChanges();
+          tick();
           expect(view.textNodes[0].nodeValue).toEqual('buz');
         });
 
@@ -540,7 +581,7 @@ export function main() {
           createViewAndChangeDetector(pv);
 
           ctx.foo = 'buz';
-          cd.detectChanges();
+          tick();
           expect(view.bindElements[0].id).toEqual('buz');
         });
 
@@ -552,7 +593,7 @@ export function main() {
           createViewAndChangeDetector(pv);
 
           ctx.foo = 'buz';
-          cd.detectChanges();
+          tick();
           expect(view.elementInjectors[0].get(SomeDirective).prop).toEqual('buz');
         });
 
@@ -569,7 +610,7 @@ export function main() {
 
           ctx.a = 100;
           ctx.b = 200;
-          cd.detectChanges();
+          tick();
 
           var directive = view.elementInjectors[0].get(DirectiveImplementingOnChange);
           expect(directive.c).toEqual(300);
@@ -588,10 +629,10 @@ export function main() {
 
           ctx.a = 0;
           ctx.b = 0;
-          cd.detectChanges();
+          tick();
 
           ctx.a = 100;
-          cd.detectChanges();
+          tick();
 
           var directive = view.elementInjectors[0].get(DirectiveImplementingOnChange);
           expect(directive.changes["a"].currentValue).toEqual(100);
@@ -622,6 +663,35 @@ export function main() {
         var view = rootProtoView.instantiate(null);
         view.hydrate(new Injector([]), null, null);
         expect(element.shadowRoot.childNodes[0].childNodes[0].nodeValue).toEqual('hi');
+      });
+    });
+
+    describe('dom read and write queues on a single view', () => {
+      var view;
+      beforeEach(() => {
+        var pv = new ProtoView(el('<div>hi</div>'), new DynamicProtoChangeDetector(),
+          new NativeShadowDomStrategy());
+        view = pv.instantiate(null);
+      });
+
+      it('should queue up and execute callbacks on the read queue', () => {
+        view.addToReadQueue(logCallback('1'));
+        view.addToReadQueue(logCallback('2'));
+
+        view.runReadQueueDown();
+        view.runReadQueueDown();
+
+        expect(log).toEqual('1 2 ');
+      });
+
+      it('should queue up and execute callbacks on the read queue', () => {
+        view.addToWriteQueue(logCallback('1'));
+        view.addToWriteQueue(logCallback('2'));
+
+        view.runWriteQueueDown();
+        view.runWriteQueueDown();
+
+        expect(log).toEqual('1 2 ');
       });
     });
   });
