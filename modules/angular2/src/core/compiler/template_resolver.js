@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/di';
-import {View} from 'angular2/src/core/annotations/view';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 
 import {Type, stringify, isBlank, BaseException} from 'angular2/src/facade/lang';
 import {Map, MapWrapper, List, ListWrapper} from 'angular2/src/facade/collection';
@@ -15,7 +15,7 @@ export class TemplateResolver {
     this._cache = MapWrapper.create();
   }
 
-  resolve(component: Type): View {
+  resolve(component: Type): ViewAnnotation {
     var view = MapWrapper.get(this._cache, component);
 
     if (isBlank(view)) {
@@ -30,7 +30,7 @@ export class TemplateResolver {
     var annotations = reflector.annotations(component);
     for (var i = 0; i < annotations.length; i++) {
       var annotation = annotations[i];
-      if (annotation instanceof View) {
+      if (annotation instanceof ViewAnnotation) {
         return annotation;
       }
     }

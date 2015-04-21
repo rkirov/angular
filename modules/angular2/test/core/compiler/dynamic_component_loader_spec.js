@@ -16,8 +16,8 @@ import {
 
 import {TestBed} from 'angular2/src/test_lib/test_bed';
 
-import {Decorator, Component, Viewport, DynamicComponent} from 'angular2/src/core/annotations/annotations';
-import {View} from 'angular2/src/core/annotations/view';
+import {DecoratorAnnotation, ComponentAnnotation, ViewportAnnotation, DynamicComponentAnnotation} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 import {DynamicComponentLoader} from 'angular2/src/core/compiler/dynamic_component_loader';
 import {ElementRef} from 'angular2/src/core/compiler/element_injector';
 import {If} from 'angular2/src/directives/if';
@@ -27,7 +27,7 @@ export function main() {
   describe('DynamicComponentLoader', function () {
     describe("loading into existing location", () => {
       it('should work', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<dynamic-comp #dynamic></dynamic-comp>',
           directives: [DynamicComp]
         }));
@@ -45,7 +45,7 @@ export function main() {
       }));
 
       it('should inject dependencies of the dynamically-loaded component', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<dynamic-comp #dynamic></dynamic-comp>',
           directives: [DynamicComp]
         }));
@@ -61,7 +61,7 @@ export function main() {
 
       it('should allow to destroy and create them via viewport directives',
         inject([TestBed, AsyncTestCompleter], (tb, async) => {
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<div><dynamic-comp #dynamic template="if: ctxBoolProp"></dynamic-comp></div>',
             directives: [DynamicComp, If]
           }));
@@ -97,7 +97,7 @@ export function main() {
     describe("loading next to an existing location", () => {
       it('should work', inject([DynamicComponentLoader, TestBed, AsyncTestCompleter],
         (loader, tb, async) => {
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<div><location #loc></location></div>',
             directives: [Location]
           }));
@@ -114,7 +114,7 @@ export function main() {
 
       it('should return a disposable component ref', inject([DynamicComponentLoader, TestBed, AsyncTestCompleter],
         (loader, tb, async) => {
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<div><location #loc></location></div>',
             directives: [Location]
           }));
@@ -139,7 +139,7 @@ export function main() {
     describe('loading into a new location', () => {
       it('should allow to create, update and destroy components',
           inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<imp-ng-cmp #impview></imp-ng-cmp>',
           directives: [ImperativeViewComponentUsingNgComponent]
         }));
@@ -171,10 +171,10 @@ export function main() {
   });
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'imp-ng-cmp'
 })
-@View({
+@ViewAnnotation({
   renderer: 'imp-ng-cmp-renderer'
 })
 class ImperativeViewComponentUsingNgComponent {
@@ -187,10 +187,10 @@ class ImperativeViewComponentUsingNgComponent {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'child-cmp',
 })
-@View({
+@ViewAnnotation({
   template: '{{ctxProp}}'
 })
 class ChildComp {
@@ -204,7 +204,7 @@ class ChildComp {
 class DynamicallyCreatedComponentService {
 }
 
-@DynamicComponent({
+@DynamicComponentAnnotation({
   selector: 'dynamic-comp'
 })
 class DynamicComp {
@@ -215,11 +215,11 @@ class DynamicComp {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'hello-cmp',
   injectables: [DynamicallyCreatedComponentService]
 })
-@View({
+@ViewAnnotation({
   template: "{{greeting}}"
 })
 class DynamicallyCreatedCmp {
@@ -232,20 +232,20 @@ class DynamicallyCreatedCmp {
   }
 }
 
-@Component({selector: 'dummy'})
-@View({template: "DynamicallyLoaded;"})
+@ComponentAnnotation({selector: 'dummy'})
+@ViewAnnotation({template: "DynamicallyLoaded;"})
 class DynamicallyLoaded {
 }
 
-@Component({selector: 'dummy'})
-@View({template: "DynamicallyLoaded2;"})
+@ComponentAnnotation({selector: 'dummy'})
+@ViewAnnotation({template: "DynamicallyLoaded2;"})
 class DynamicallyLoaded2 {
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'location'
 })
-@View({template: "Location;"})
+@ViewAnnotation({template: "Location;"})
 class Location {
   elementRef:ElementRef;
 
@@ -254,8 +254,8 @@ class Location {
   }
 }
 
-@Component()
-@View({
+@ComponentAnnotation()
+@ViewAnnotation({
   directives: []
 })
 class MyComp {

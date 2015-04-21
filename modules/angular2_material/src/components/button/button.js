@@ -1,17 +1,17 @@
-import {Component, View} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {PropertySetter, EventEmitter} from 'angular2/src/core/annotations/di';
 import {onChange} from 'angular2/src/core/annotations/annotations';
 import {isPresent, StringWrapper} from 'angular2/src/facade/lang';
 
 
-@Component({selector: '[md-button]:not([href])'})
-@View({templateUrl: 'angular2_material/src/components/button/button.html'})
+@ComponentAnnotation({selector: '[md-button]:not([href])'})
+@ViewAnnotation({templateUrl: 'angular2_material/src/components/button/button.html'})
 export class MdButton {
   // TODO(jelbourn): Ink ripples.
 }
 
 
-@Component({
+@ComponentAnnotation({
   selector: '[md-button][href]',
   properties: {
     'disabled': 'disabled'
@@ -19,7 +19,7 @@ export class MdButton {
   hostListeners: {'click': 'onClick($event)'},
   lifecycle: [onChange]
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/button/button.html'
 })
 export class MdAnchor {

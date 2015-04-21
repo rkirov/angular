@@ -33,13 +33,29 @@ export class ReflectionCapabilities {
   }
 
   parameters(typeOfFunc):List<List> {
+    if (isPresent(window.Reflect) && !typeOfFunc.parameters) {
+      var reflect = window.Reflect.getMetadata('design:paramtypes', typeOfFunc);
+      if (isPresent(reflect)) {
+        reflect = reflect.map((p) => [p]);
+      } else {
+        reflect = ListWrapper.createFixedSize(typeOfFunc.length);
+      }
+      return reflect;
+    }
     return isPresent(typeOfFunc.parameters) ?
       typeOfFunc.parameters :
       ListWrapper.createFixedSize(typeOfFunc.length);
   }
 
   annotations(typeOfFunc):List {
-    return isPresent(typeOfFunc.annotations) ? typeOfFunc.annotations : [];
+    if (isPresent(typeOfFunc.annotations)) {
+      return typeOfFunc.annotations;
+    }
+    if (isPresent(window.Reflect)) {
+      var annotations = window.Reflect.getMetadata('annotations', typeOfFunc);
+      return isPresent(annotations) ? annotations : [];
+    }
+    return [];
   }
 
   getter(name:string):GetterFn {

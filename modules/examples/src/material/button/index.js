@@ -1,13 +1,13 @@
-import {bootstrap, Component, View, MapWrapper, ListWrapper, For} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, ViewAnnotation, MapWrapper, ListWrapper, For} from 'angular2/angular2';
 import {MdButton, MdAnchor} from 'angular2_material/src/components/button/button'
 import {UrlResolver} from 'angular2/src/services/url_resolver';
 import {commonDemoSetup, DemoUrlResolver} from '../demo_common';
 import {bind} from 'angular2/di';
 
-@Component({
+@ComponentAnnotation({
   selector: 'demo-app'
 })
-@View({
+@ViewAnnotation({
   templateUrl: './demo_app.html',
   directives: [MdButton, MdAnchor, For]
 })

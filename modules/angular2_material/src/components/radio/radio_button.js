@@ -1,4 +1,4 @@
-import {Component, View, Parent, Ancestor, Attribute, PropertySetter} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation, Parent, Ancestor, Attribute, PropertySetter} from 'angular2/angular2';
 import {Optional} from 'angular2/src/di/annotations';
 import {MdRadioDispatcher} from 'angular2_material/src/components/radio/radio_dispatcher'
 import {onChange} from 'angular2/src/core/annotations/annotations';
@@ -22,7 +22,7 @@ import {Event, KeyboardEvent} from 'angular2/src/facade/browser';
 
 var _uniqueIdCounter:number = 0;
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-radio-button',
   lifecycle: [onChange],
   properties: {
@@ -36,7 +36,7 @@ var _uniqueIdCounter:number = 0;
     'keydown': 'onKeydown($event)'
   }
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/radio/radio_button.html',
   directives: []
 })
@@ -173,7 +173,7 @@ export class MdRadioButton {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-radio-group',
   lifecycle: [onChange],
   events: ['change'],
@@ -185,7 +185,7 @@ export class MdRadioButton {
     'keydown': 'onKeydown($event)'
   }
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/radio/radio_group.html'
 })
 export class MdRadioGroup {

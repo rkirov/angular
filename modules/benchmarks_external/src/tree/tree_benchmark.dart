@@ -45,7 +45,7 @@ main() {
   bindAction('#createDom', createDom);
 }
 
-@Component(
+@ComponentAnnotation(
   selector: 'tree',
   map: const {'data': '=>data'},
   template: '<span> {{data.value}}'

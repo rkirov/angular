@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {ListWrapper, MapWrapper} from 'angular2/src/facade/collection';
 import {CompanyNameComponent, OpportunityNameComponent,
     OfferingNameComponent, StageButtonsComponent, AccountCellComponent,
@@ -9,13 +9,13 @@ import {Offering, ITEM_HEIGHT, COMPANY_NAME_WIDTH, OPPORTUNITY_NAME_WIDTH,
     KICKER_POINTS_WIDTH, STAGE_BUTTONS_WIDTH, BUNDLES_WIDTH, DUE_DATE_WIDTH,
     END_DATE_WIDTH, AAT_STATUS_WIDTH} from './common';
 
-@Component({
+@ComponentAnnotation({
   selector: 'scroll-item',
   properties: {
     'offering': 'offering'
   }
 })
-@View({
+@ViewAnnotation({
   directives: [
     CompanyNameComponent,
     OpportunityNameComponent,

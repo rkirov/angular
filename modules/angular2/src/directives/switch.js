@@ -1,4 +1,4 @@
-import {Decorator, Viewport} from 'angular2/src/core/annotations/annotations';
+import {DecoratorAnnotation, ViewportAnnotation} from 'angular2/src/core/annotations/annotations';
 import {ViewContainer} from 'angular2/src/core/compiler/view_container';
 import {isPresent, isBlank, normalizeBlank} from 'angular2/src/facade/lang';
 import {ListWrapper, List, MapWrapper, Map} from 'angular2/src/facade/collection';
@@ -31,7 +31,7 @@ import {Parent} from 'angular2/src/core/annotations/visibility';
  *
  * @exportedAs angular2/directives
  */
-@Decorator({
+@DecoratorAnnotation({
   selector: '[switch]',
   properties: {
     'value': 'switch'
@@ -144,7 +144,7 @@ export class Switch {
  *
  * @exportedAs angular2/directives
  */
-@Viewport({
+@ViewportAnnotation({
   selector: '[switch-when]',
   properties: {
     'when' : 'switch-when'
@@ -182,7 +182,7 @@ export class SwitchWhen {
  *
  * @exportedAs angular2/directives
  */
-@Viewport({
+@ViewportAnnotation({
   selector: '[switch-default]'
 })
 export class SwitchDefault {

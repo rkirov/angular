@@ -1,15 +1,15 @@
-import {bootstrap, Component, View} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {MdRadioButton, MdRadioGroup} from 'angular2_material/src/components/radio/radio_button'
 import {MdRadioDispatcher} from 'angular2_material/src/components/radio/radio_dispatcher'
 import {UrlResolver} from 'angular2/src/services/url_resolver';
 import {commonDemoSetup, DemoUrlResolver} from '../demo_common';
 import {bind} from 'angular2/di';
 
-@Component({
+@ComponentAnnotation({
   selector: 'demo-app',
   injectables: [MdRadioDispatcher]
 })
-@View({
+@ViewAnnotation({
   templateUrl: './demo_app.html',
   directives: [MdRadioGroup, MdRadioButton]
 })

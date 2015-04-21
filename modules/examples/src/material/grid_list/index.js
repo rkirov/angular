@@ -1,13 +1,13 @@
-import {bootstrap, Component, View} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {MdGridList, MdGridTile} from 'angular2_material/src/components/grid_list/grid_list'
 import {UrlResolver} from 'angular2/src/services/url_resolver';
 import {commonDemoSetup, DemoUrlResolver} from '../demo_common';
 import {bind} from 'angular2/di';
 
-@Component({
+@ComponentAnnotation({
   selector: 'demo-app'
 })
-@View({
+@ViewAnnotation({
   templateUrl: './demo_app.html',
   directives: [MdGridList, MdGridTile]
 })

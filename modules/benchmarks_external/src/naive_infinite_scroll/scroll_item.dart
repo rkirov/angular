@@ -3,7 +3,7 @@ library scroll_item;
 import 'package:angular/angular.dart';
 import 'common.dart';
 
-@Component(
+@ComponentAnnotation(
     selector: 'scroll-item',
     templateUrl: 'scroll_item.html',
     map: const {

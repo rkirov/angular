@@ -6,7 +6,7 @@ import 'package:angular/angular.dart';
 import 'common.dart';
 import 'random_data.dart';
 
-@Component(
+@ComponentAnnotation(
     selector: 'scroll-area',
     templateUrl: 'scroll_area.html',
     map: const {

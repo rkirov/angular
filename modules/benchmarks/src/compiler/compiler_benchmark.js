@@ -9,9 +9,9 @@ import {Parser, Lexer, DynamicChangeDetection} from 'angular2/change_detection';
 import {Compiler, CompilerCache} from 'angular2/src/core/compiler/compiler';
 import {DirectiveMetadataReader} from 'angular2/src/core/compiler/directive_metadata_reader';
 
-import {Component} from 'angular2/src/core/annotations/annotations';
-import {Decorator} from 'angular2/src/core/annotations/annotations';
-import {View} from 'angular2/src/core/annotations/view';
+import {ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
+import {DecoratorAnnotation} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 import {TemplateLoader} from 'angular2/src/render/dom/compiler/template_loader';
 import {TemplateResolver} from 'angular2/src/core/compiler/template_resolver';
 import {UrlResolver} from 'angular2/src/services/url_resolver';
@@ -110,7 +110,7 @@ function createTemplateHtml(templateId, repeatCount) {
   return result;
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[dir0]',
   properties: {
     'prop': 'attr0'
@@ -118,7 +118,7 @@ function createTemplateHtml(templateId, repeatCount) {
 })
 class Dir0 {}
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[dir1]',
   properties: {
     'prop': 'attr1'
@@ -128,7 +128,7 @@ class Dir1 {
   constructor(dir0:Dir0) {}
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[dir2]',
   properties: {
     'prop': 'attr2'
@@ -138,7 +138,7 @@ class Dir2 {
   constructor(dir1:Dir1) {}
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[dir3]',
   properties: {
     'prop': 'attr3'
@@ -148,7 +148,7 @@ class Dir3 {
   constructor(dir2:Dir2) {}
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[dir4]',
   properties: {
     'prop': 'attr4'
@@ -158,24 +158,24 @@ class Dir4 {
   constructor(dir3:Dir3) {}
 }
 
-@Component()
+@ComponentAnnotation()
 class BenchmarkComponent {}
 
 class FakeTemplateResolver extends TemplateResolver {
-  _template: View;
+  _template: ViewAnnotation;
 
   constructor() {
     super();
   }
 
   setTemplateHtml(html: string) {
-    this._template = new View({
+    this._template = new ViewAnnotation({
       template: html,
       directives: [Dir0, Dir1, Dir2, Dir3, Dir4]
     });
   }
 
-  resolve(component: Type): View {
+  resolve(component: Type): ViewAnnotation {
     return this._template;
   }
 }

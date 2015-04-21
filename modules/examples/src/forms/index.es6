@@ -1,4 +1,4 @@
-import {bootstrap, Component, Decorator, View, If, For, EventEmitter} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, DecoratorAnnotation, ViewAnnotation, If, For, EventEmitter} from 'angular2/angular2';
 import {FormBuilder, Validators, FormDirectives, ControlGroup} from 'angular2/forms';
 
 // HeaderFields renders the bound header control group. It can used as follows:
@@ -6,13 +6,13 @@ import {FormBuilder, Validators, FormDirectives, ControlGroup} from 'angular2/fo
 //   <survey-header [header]="header"></survey-header>
 //
 // This component is self-contained and can be tested in isolation.
-@Component({
+@ComponentAnnotation({
   selector: 'survey-header',
   properties: {
     "header" : "header"
   }
 })
-@View({
+@ViewAnnotation({
   template: `
       <div [control-group]="header">
         <div>
@@ -51,7 +51,7 @@ class HeaderFields {
 //
 // SurveyQuestion uses EventEmitter to fire the delete action.
 // This component is self-contained and can be tested in isolation.
-@Component({
+@ComponentAnnotation({
   selector: 'survey-question',
   events: ['destroy'],
   properties: {
@@ -59,7 +59,7 @@ class HeaderFields {
     "index" : "index"
   }
 })
-@View({
+@ViewAnnotation({
   template: `
       <h2>Question #{{index}}</h2>
 
@@ -117,11 +117,11 @@ class SurveyQuestion {
 
 
 // SurveyBuilder is a form that allows you to create a survey.
-@Component({
+@ComponentAnnotation({
   selector: 'survey-builder-app',
   injectables: [FormBuilder]
 })
-@View({
+@ViewAnnotation({
   template: `
     <h1>Create New Survey</h1>
 

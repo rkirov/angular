@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {ListWrapper, MapWrapper} from 'angular2/src/facade/collection';
 import {Math} from 'angular2/src/facade/math';
 
@@ -8,10 +8,10 @@ import {generateOfferings} from './random_data';
 import {ScrollItemComponent} from './scroll_item';
 import {For} from 'angular2/directives';
 
-@Component({
+@ComponentAnnotation({
   selector: 'scroll-area',
 })
-@View({
+@ViewAnnotation({
   directives: [ScrollItemComponent, For],
   template: `
     <div>

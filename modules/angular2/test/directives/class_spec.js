@@ -15,8 +15,8 @@ import {
 
 import {StringMapWrapper} from 'angular2/src/facade/collection';
 
-import {View} from 'angular2/src/core/annotations/view';
-import {Component} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
+import {ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
 
 import {TestBed} from 'angular2/src/test_lib/test_bed';
 
@@ -140,8 +140,8 @@ export function main() {
   })
 }
 
-@Component({selector: 'test-cmp'})
-@View({directives: [CSSClass]})
+@ComponentAnnotation({selector: 'test-cmp'})
+@ViewAnnotation({directives: [CSSClass]})
 class TestComponent {
   condition:boolean;
   expr;

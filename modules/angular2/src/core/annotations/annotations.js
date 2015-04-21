@@ -238,7 +238,7 @@ import {DEFAULT} from 'angular2/change_detection';
  * @exportedAs angular2/annotations
  */
 @ABSTRACT()
-export class Directive extends Injectable {
+export class DirectiveAnnotation extends Injectable {
   /**
    * The CSS selector that triggers the instantiation of a directive.
    *
@@ -519,7 +519,7 @@ export class Directive extends Injectable {
  *
  * @exportedAs angular2/annotations
  */
-export class Component extends Directive {
+export class ComponentAnnotation extends DirectiveAnnotation {
   /**
    * Defines the used change detection strategy.
    *
@@ -658,7 +658,7 @@ export class Component extends Directive {
  *
  * @exportedAs angular2/annotations
  */
-export class DynamicComponent extends Directive {
+export class DynamicComponentAnnotation extends DirectiveAnnotation {
   /**
    * Same as `injectables` in the {@link Component}.
    */
@@ -753,7 +753,7 @@ export class DynamicComponent extends Directive {
  *
  * @exportedAs angular2/annotations
  */
-export class Decorator extends Directive {
+export class DecoratorAnnotation extends DirectiveAnnotation {
 
   /**
    * If set to true the compiler does not compile the children of this directive.
@@ -882,7 +882,7 @@ export class Decorator extends Directive {
  *
  * @exportedAs angular2/annotations
  */
-export class Viewport extends Directive {
+export class ViewportAnnotation extends DirectiveAnnotation {
   @CONST()
   constructor({
       selector,

@@ -4,7 +4,7 @@ import {isPresent, isBlank} from 'angular2/src/facade/lang';
 import {reflector} from 'angular2/src/reflection/reflection';
 
 import {ChangeDetection} from 'angular2/change_detection';
-import {Component, Viewport, DynamicComponent} from '../annotations/annotations';
+import {ComponentAnnotation, ViewportAnnotation, DynamicComponentAnnotation} from '../annotations/annotations';
 
 import * as renderApi from 'angular2/src/render/api';
 import {AppProtoView} from './view';
@@ -23,7 +23,7 @@ export class ProtoViewFactory {
     if (isBlank(componentBinding)) {
       protoChangeDetector = this._changeDetection.createProtoChangeDetector('root', null);
     } else {
-      var componentAnnotation:Component = componentBinding.annotation;
+      var componentAnnotation:ComponentAnnotation = componentBinding.annotation;
       protoChangeDetector = this._changeDetection.createProtoChangeDetector(
         'dummy', componentAnnotation.changeDetection
       );
@@ -158,13 +158,13 @@ class SortedDirectives {
     this.componentDirective = null;
     ListWrapper.forEach(renderDirectives, (renderDirectiveMetadata) => {
       var directiveBinding = allDirectives[renderDirectiveMetadata.directiveIndex];
-      if ((directiveBinding.annotation instanceof Component) || (directiveBinding.annotation instanceof DynamicComponent)) {
+      if ((directiveBinding.annotation instanceof ComponentAnnotation) || (directiveBinding.annotation instanceof DynamicComponentAnnotation)) {
         // component directives need to be the first binding in ElementInjectors!
         this.componentDirective = directiveBinding;
         ListWrapper.insert(this.renderDirectives, 0, renderDirectiveMetadata);
         ListWrapper.insert(this.directives, 0, directiveBinding);
       } else {
-        if (directiveBinding.annotation instanceof Viewport) {
+        if (directiveBinding.annotation instanceof ViewportAnnotation) {
           this.viewportDirective = directiveBinding;
         }
         ListWrapper.push(this.renderDirectives, renderDirectiveMetadata);

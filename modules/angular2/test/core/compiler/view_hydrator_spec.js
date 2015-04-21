@@ -23,7 +23,7 @@ import {ChangeDetector} from 'angular2/change_detection';
 import {ElementBinder} from 'angular2/src/core/compiler/element_binder';
 import {DirectiveBinding, ElementInjector, ElementRef} from 'angular2/src/core/compiler/element_injector';
 import {DirectiveMetadataReader} from 'angular2/src/core/compiler/directive_metadata_reader';
-import {Component} from 'angular2/src/core/annotations/annotations';
+import {ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
 import {AppViewHydrator} from 'angular2/src/core/compiler/view_hydrator';
 import {ViewFactory} from 'angular2/src/core/compiler/view_factory';
 
@@ -250,7 +250,7 @@ export function main() {
   });
 }
 
-@Component({ selector: 'someComponent' })
+@ComponentAnnotation({ selector: 'someComponent' })
 class SomeComponent {}
 
 @proxy

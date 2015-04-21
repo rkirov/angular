@@ -12,17 +12,17 @@ import {
 } from 'angular2/test_lib';
 import {bootstrap} from 'angular2/src/core/application';
 import {appDocumentToken, appElementToken} from 'angular2/src/core/application_tokens';
-import {Component, Decorator} from 'angular2/src/core/annotations/annotations';
+import {ComponentAnnotation, DecoratorAnnotation} from 'angular2/src/core/annotations/annotations';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 import {ListWrapper} from 'angular2/src/facade/collection';
 import {PromiseWrapper} from 'angular2/src/facade/async';
 import {bind, Inject} from 'angular2/di';
-import {View} from 'angular2/src/core/annotations/view';
+import {ViewAnnotation} from 'angular2/angular2';
 import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 import {Testability, TestabilityRegistry} from 'angular2/src/core/testability/testability';
 
-@Component({selector: 'hello-app'})
-@View({template: '{{greeting}} world!'})
+@ComponentAnnotation({selector: 'hello-app'})
+@ViewAnnotation({template: '{{greeting}} world!'})
 class HelloRootCmp {
   greeting:string;
   constructor() {
@@ -30,14 +30,14 @@ class HelloRootCmp {
   }
 }
 
-@Component({selector: 'hello-app'})
-@View({template: 'before: <content></content> after: done'})
+@ComponentAnnotation({selector: 'hello-app'})
+@ViewAnnotation({template: 'before: <content></content> after: done'})
 class HelloRootCmpContent {
   constructor() { }
 }
 
-@Component({selector: 'hello-app-2'})
-@View({template: '{{greeting}} world, again!'})
+@ComponentAnnotation({selector: 'hello-app-2'})
+@ViewAnnotation({template: '{{greeting}} world, again!'})
 class HelloRootCmp2 {
   greeting:string;
   constructor() {
@@ -45,8 +45,8 @@ class HelloRootCmp2 {
   }
 }
 
-@Component({selector: 'hello-app'})
-@View({template: ''})
+@ComponentAnnotation({selector: 'hello-app'})
+@ViewAnnotation({template: ''})
 class HelloRootCmp3 {
   appBinding;
 
@@ -55,8 +55,8 @@ class HelloRootCmp3 {
   }
 }
 
-@Component({selector: 'hello-app'})
-@View({template: ''})
+@ComponentAnnotation({selector: 'hello-app'})
+@ViewAnnotation({template: ''})
 class HelloRootCmp4 {
   lc;
 
@@ -65,10 +65,10 @@ class HelloRootCmp4 {
   }
 }
 
-@Component({selector: 'hello-app'})
+@ComponentAnnotation({selector: 'hello-app'})
 class HelloRootMissingTemplate { }
 
-@Decorator({selector: 'hello-app'})
+@DecoratorAnnotation({selector: 'hello-app'})
 class HelloRootDirectiveIsNotCmp { }
 
 export function main() {
@@ -87,7 +87,7 @@ export function main() {
   });
 
   describe('bootstrap factory method', () => {
-    it('should throw if no View found', inject([AsyncTestCompleter], (async) => {
+    it('should throw if no ViewAnnotation found', inject([AsyncTestCompleter], (async) => {
       var refPromise = bootstrap(HelloRootMissingTemplate, testBindings, (e,t) => {throw e;});
       PromiseWrapper.then(refPromise, null, (reason) => {
         expect(reason.message).toContain('No template found for HelloRootMissingTemplate');
@@ -95,7 +95,7 @@ export function main() {
       });
     }));
 
-    it('should throw if bootstrapped Directive is not a Component', inject([AsyncTestCompleter], (async) => {
+    it('should throw if bootstrapped Directive is not a ComponentAnnotation', inject([AsyncTestCompleter], (async) => {
       var refPromise = bootstrap(HelloRootDirectiveIsNotCmp, testBindings, (e,t) => {throw e;});
       PromiseWrapper.then(refPromise, null, (reason) => {
         expect(reason.message).toContain(`Could not load 'HelloRootDirectiveIsNotCmp' because it is not a component.`);
@@ -125,7 +125,7 @@ export function main() {
       });
     }));
 
-    it('should provide the application component in the injector', inject([AsyncTestCompleter], (async) => {
+    it('should provide the application ComponentAnnotation in the injector', inject([AsyncTestCompleter], (async) => {
       var refPromise = bootstrap(HelloRootCmp, testBindings);
       refPromise.then((ref) => {
         expect(ref.injector.get(HelloRootCmp)).toBeAnInstanceOf(HelloRootCmp);
@@ -151,7 +151,7 @@ export function main() {
       });
     }));
 
-    it("should make the provided bindings available to the application component", inject([AsyncTestCompleter], (async) => {
+    it("should make the provided bindings available to the application ComponentAnnotation", inject([AsyncTestCompleter], (async) => {
       var refPromise = bootstrap(HelloRootCmp3, [
         testBindings,
         bind("appBinding").toValue("BoundValue")
@@ -163,7 +163,7 @@ export function main() {
       });
     }));
 
-    it("should avoid cyclic dependencies when root component requires Lifecycle through DI", inject([AsyncTestCompleter], (async) => {
+    it("should avoid cyclic dependencies when root ComponentAnnotation requires Lifecycle through DI", inject([AsyncTestCompleter], (async) => {
       var refPromise = bootstrap(HelloRootCmp4, testBindings);
 
       refPromise.then((ref) => {

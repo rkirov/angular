@@ -80,7 +80,7 @@ export class DirectiveParser extends CompileStep {
       }
       if (directive.type === DirectiveMetadata.VIEWPORT_TYPE) {
         if (!isTemplateElement) {
-          throw new BaseException(`Viewport directives need to be placed on <template> elements or elements ` +
+            throw new BaseException(`Viewport directives need to be placed on <template> elements or elements ` +
             `with template attribute - check ${current.elementDescription}`);
         }
         if (isPresent(viewportDirective)) {
@@ -138,7 +138,7 @@ export class DirectiveParser extends CompileStep {
     } else {
       directiveBinder.bindEvent(eventName, ast);
     }
-    
+
   }
 
   _splitBindConfig(bindConfig:string) {

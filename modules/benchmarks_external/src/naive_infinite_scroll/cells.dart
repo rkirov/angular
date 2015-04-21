@@ -3,7 +3,7 @@ library cells;
 import 'package:angular/angular.dart';
 import 'common.dart';
 
-@Component(
+@ComponentAnnotation(
     selector: 'company-name',
     template: '''
     <div style="width: {{width}}">{{company.name}}</div>
@@ -17,7 +17,7 @@ class CompanyNameComponent {
   Company company;
 }
 
-@Component(
+@ComponentAnnotation(
     selector: 'opportunity-name',
     template: '''
     <div style="width: {{width}}">{{opportunity.name}}</div>
@@ -31,7 +31,7 @@ class OpportunityNameComponent {
   Opportunity opportunity;
 }
 
-@Component(
+@ComponentAnnotation(
     selector: 'offering-name',
     template: '''
     <div style="width: {{width}}">{{offering.name}}</div>
@@ -58,7 +58,7 @@ class Stage {
     : '';
 }
 
-@Component(
+@ComponentAnnotation(
     selector: 'stage-buttons',
     template: '''
     <div style="width: {{width}}">
@@ -115,7 +115,7 @@ class StageButtonsComponent {
   }
 }
 
-@Component(
+@ComponentAnnotation(
     selector: 'account-cell',
     template: '''
     <div style="width: {{width}}">
@@ -133,7 +133,7 @@ class AccountCellComponent {
   String width;
 }
 
-@Component(
+@ComponentAnnotation(
     selector: 'formatted-cell',
     template: '''<div style="width: {{width}}">{{formattedValue}}</div>''',
     map: const {

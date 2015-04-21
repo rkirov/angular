@@ -10,8 +10,8 @@ import {
 
 import {MockTemplateResolver} from 'angular2/src/mock/template_resolver_mock';
 
-import {Component} from 'angular2/src/core/annotations/annotations';
-import {View} from 'angular2/src/core/annotations/view';
+import {ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 
 import {isBlank} from 'angular2/src/facade/lang';
 
@@ -23,7 +23,7 @@ export function main() {
       resolver = new MockTemplateResolver();
     });
 
-    describe('View overriding', () => {
+    describe('ViewAnnotation overriding', () => {
       it('should fallback to the default TemplateResolver when templates are not overridden', () => {
         var template = resolver.resolve(SomeComponent);
         expect(template.template).toEqual('template');
@@ -31,7 +31,7 @@ export function main() {
       });
 
       it('should allow overriding the @View', () => {
-        resolver.setView(SomeComponent, new View({template: 'overridden template'}));
+        resolver.setView(SomeComponent, new ViewAnnotation({template: 'overridden template'}));
         var template = resolver.resolve(SomeComponent);
         expect(template.template).toEqual('overridden template');
         expect(isBlank(template.directives)).toBe(true);
@@ -41,7 +41,7 @@ export function main() {
       it('should not allow overriding a template after it has been resolved', () => {
         resolver.resolve(SomeComponent);
         expect(() => {
-          resolver.setView(SomeComponent, new View({template: 'overridden template'}));
+          resolver.setView(SomeComponent, new ViewAnnotation({template: 'overridden template'}));
         }).toThrowError('The component SomeComponent has already been compiled, its configuration can not be changed');
       });
     });
@@ -54,8 +54,8 @@ export function main() {
         expect(template.directives).toEqual([SomeDirective]);
       });
 
-      it('should allow overriding an overriden @View', () => {
-        resolver.setView(SomeComponent, new View({template: 'overridden template'}));
+      it('should allow overriding an overriden @ViewAnnotation', () => {
+        resolver.setView(SomeComponent, new ViewAnnotation({template: 'overridden template'}));
         resolver.setInlineTemplate(SomeComponent, 'overridden template x 2');
         var template = resolver.resolve(SomeComponent);
         expect(template.template).toEqual('overridden template x 2');
@@ -79,7 +79,7 @@ export function main() {
       });
 
       it('should allow overriding a directive from an overriden @View', () => {
-        resolver.setView(SomeComponent, new View({directives: [SomeOtherDirective]}));
+        resolver.setView(SomeComponent, new ViewAnnotation({directives: [SomeOtherDirective]}));
         resolver.overrideTemplateDirective(SomeComponent, SomeOtherDirective, SomeComponent);
         var template = resolver.resolve(SomeComponent);
         expect(template.directives.length).toEqual(1);
@@ -102,8 +102,8 @@ export function main() {
   });
 }
 
-@Component({selector: 'cmp'})
-@View({
+@ComponentAnnotation({selector: 'cmp'})
+@ViewAnnotation({
   template: 'template',
   directives: [SomeDirective],
 })

@@ -1,16 +1,16 @@
-import {bootstrap, Component, View, For} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, ViewAnnotation, For} from 'angular2/angular2';
 import {Store, Todo, TodoFactory} from './services/TodoStore';
 import {reflector} from 'angular2/src/reflection/reflection';
 import {ReflectionCapabilities} from 'angular2/src/reflection/reflection_capabilities';
 
-@Component({
+@ComponentAnnotation({
   selector: 'todo-app',
   injectables: [
     Store,
     TodoFactory
   ]
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'todo.html',
   directives: [For]
 })

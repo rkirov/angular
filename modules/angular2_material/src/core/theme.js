@@ -1,6 +1,6 @@
-import {Decorator} from 'angular2/angular2';
+import {DecoratorAnnotation} from 'angular2/angular2';
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[md-theme]'
 })
 export class MdTheme {

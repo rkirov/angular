@@ -1,15 +1,15 @@
-import {Component, Decorator, View, NgElement} from 'angular2/angular2';
+import {ComponentAnnotation, DecoratorAnnotation, ViewAnnotation, NgElement} from 'angular2/angular2';
 import {Injectable} from 'angular2/di';
 
 // Angular 2.0 supports 3 basic types of directives:
-// - Component - the basic building blocks of Angular 2.0 apps. Backed by
+// - ComponentAnnotation - the basic building blocks of Angular 2.0 apps. Backed by
 //   ShadowDom.(http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/)
-// - Decorator - add behavior to existing elements.
+// - DecoratorAnnotation - add behavior to existing elements.
 // - Viewport - allow for stamping out of a html template (not in this demo).
 
 // @Component is AtScript syntax to annotate the HelloCmp class as an Angular
 // 2.0 component.
-@Component({
+@ComponentAnnotation({
   // The Selector prop tells Angular on which elements to instantiate this
   // class. The syntax supported is a basic subset of CSS selectors, for example
   // 'element', '[attr]', [attr=foo]', etc.
@@ -19,7 +19,7 @@ import {Injectable} from 'angular2/di';
   injectables: [GreetingService]
 })
 // The template for the component.
-@View({
+@ViewAnnotation({
   // Expressions in the template (like {{greeting}}) are evaluated in the
   // context of the HelloCmp class below.
   template: `<div class="greeting">{{greeting}} <span red>world</span>!</div>
@@ -42,7 +42,7 @@ export class HelloCmp {
 
 // Decorators are light-weight. They don't allow for templates, or new
 // expression contexts (use @Component or @Viewport for those needs).
-@Decorator({
+@DecoratorAnnotation({
   selector: '[red]'
 })
 class RedDec {

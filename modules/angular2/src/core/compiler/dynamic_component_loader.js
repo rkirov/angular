@@ -3,7 +3,7 @@ import {Compiler} from './compiler';
 import {DirectiveMetadataReader} from './directive_metadata_reader';
 import {Type, BaseException, stringify, isPresent} from 'angular2/src/facade/lang';
 import {Promise} from 'angular2/src/facade/async';
-import {Component} from 'angular2/src/core/annotations/annotations';
+import {ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
 import {ViewFactory} from 'angular2/src/core/compiler/view_factory';
 import {AppViewHydrator} from 'angular2/src/core/compiler/view_hydrator';
 import {ElementRef, DirectiveBinding} from './element_injector';
@@ -125,7 +125,7 @@ export class DynamicComponentLoader {
   /** Asserts that the type being dynamically instantiated is a Component. */
   _assertTypeIsComponent(type:Type):void {
     var annotation = this._directiveMetadataReader.read(type).annotation;
-    if (!(annotation instanceof Component)) {
+    if (!(annotation instanceof ComponentAnnotation)) {
       throw new BaseException(`Could not load '${stringify(type)}' because it is not a component.`);
     }
   }

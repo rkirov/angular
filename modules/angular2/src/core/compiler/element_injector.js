@@ -9,7 +9,7 @@ import {PropertySetter, Attribute, Query} from 'angular2/src/core/annotations/di
 import * as viewModule from 'angular2/src/core/compiler/view';
 import {ViewContainer} from 'angular2/src/core/compiler/view_container';
 import {NgElement} from 'angular2/src/core/compiler/ng_element';
-import {Directive, Component, onChange, onDestroy, onAllChangesDone} from 'angular2/src/core/annotations/annotations';
+import {DirectiveAnnotation, ComponentAnnotation, onChange, onDestroy, onAllChangesDone} from 'angular2/src/core/annotations/annotations';
 import {ChangeDetector, ChangeDetectorRef} from 'angular2/change_detection';
 import {QueryList} from './query_list';
 import {reflector} from 'angular2/src/reflection/reflection';
@@ -254,16 +254,16 @@ export class DirectiveBinding extends ResolvedBinding {
   callOnDestroy:boolean;
   callOnChange:boolean;
   callOnAllChangesDone:boolean;
-  annotation:Directive;
+  annotation:DirectiveAnnotation;
   resolvedInjectables:List<ResolvedBinding>;
 
-  constructor(key:Key, factory:Function, dependencies:List, providedAsPromise:boolean, annotation:Directive) {
+  constructor(key:Key, factory:Function, dependencies:List, providedAsPromise:boolean, annotation:DirectiveAnnotation) {
     super(key, factory, dependencies, providedAsPromise);
     this.callOnDestroy = isPresent(annotation) && annotation.hasLifecycleHook(onDestroy);
     this.callOnChange = isPresent(annotation) && annotation.hasLifecycleHook(onChange);
     this.callOnAllChangesDone = isPresent(annotation) && annotation.hasLifecycleHook(onAllChangesDone);
     this.annotation = annotation;
-    if (annotation instanceof Component && isPresent(annotation.injectables)) {
+    if (annotation instanceof ComponentAnnotation && isPresent(annotation.injectables)) {
       this.resolvedInjectables = Injector.resolve(annotation.injectables);
     }
   }
@@ -273,21 +273,21 @@ export class DirectiveBinding extends ResolvedBinding {
   }
 
   get changeDetection() {
-    if (this.annotation instanceof Component) {
-      var c:Component = this.annotation;
+    if (this.annotation instanceof ComponentAnnotation) {
+      var c:ComponentAnnotation = this.annotation;
       return c.changeDetection;
     } else {
       return null;
     }
   }
 
-  static createFromBinding(b:Binding, annotation:Directive):DirectiveBinding {
+  static createFromBinding(b:Binding, annotation:DirectiveAnnotation):DirectiveBinding {
     var rb = b.resolve();
     var deps = ListWrapper.map(rb.dependencies, DirectiveDependency.createFrom);
     return new DirectiveBinding(rb.key, rb.factory, deps, rb.providedAsPromise, annotation);
   }
 
-  static createFromType(type:Type, annotation:Directive):DirectiveBinding {
+  static createFromType(type:Type, annotation:DirectiveAnnotation):DirectiveBinding {
     var binding = new Binding(type, {toClass: type});
     return DirectiveBinding.createFromBinding(binding, annotation);
   }

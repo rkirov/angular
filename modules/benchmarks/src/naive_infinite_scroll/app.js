@@ -1,6 +1,6 @@
 import {int, isPresent} from 'angular2/src/facade/lang';
 import {getIntParameter, bindAction} from 'angular2/src/test_lib/benchmark_util';
-import {Component, View} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {PromiseWrapper} from 'angular2/src/facade/async';
 import {ListWrapper} from 'angular2/src/facade/collection';
 import {ScrollAreaComponent} from './scroll_area';
@@ -9,8 +9,8 @@ import {DOM} from 'angular2/src/dom/dom_adapter';
 import {document} from 'angular2/src/facade/browser';
 
 
-@Component({selector: 'scroll-app'})
-@View({
+@ComponentAnnotation({selector: 'scroll-app'})
+@ViewAnnotation({
   directives: [ScrollAreaComponent, If, For],
   template: `
   <div>

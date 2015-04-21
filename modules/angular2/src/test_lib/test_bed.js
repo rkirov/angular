@@ -5,7 +5,7 @@ import {Promise} from 'angular2/src/facade/async';
 import {isBlank} from 'angular2/src/facade/lang';
 import {List} from 'angular2/src/facade/collection';
 
-import {View} from 'angular2/src/core/annotations/view';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 
 import {TemplateResolver} from 'angular2/src/core/compiler/template_resolver';
 import {Compiler} from 'angular2/src/core/compiler/compiler';
@@ -30,20 +30,20 @@ export class TestBed {
   }
 
   /**
-   * Overrides the {@link View} of a {@link Component}.
+   * Overrides the {@link ViewAnnotation} of a {@link Component}.
    *
    * @see setInlineTemplate() to only override the html
    *
    * @param {Type} component
    * @param {ViewDefinition} template
    */
-  overrideView(component: Type, template: View): void {
+  overrideView(component: Type, template: ViewAnnotation): void {
     this._injector.get(TemplateResolver).setView(component, template);
   }
 
   /**
    * Overrides only the html of a {@link Component}.
-   * All the other propoerties of the component's {@link View} are preserved.
+   * All the other propoerties of the component's {@link ViewAnnotation} are preserved.
    *
    * @param {Type} component
    * @param {string} html
@@ -53,7 +53,7 @@ export class TestBed {
   }
 
   /**
-   * Overrides the directives from the component {@link View}.
+   * Overrides the directives from the component {@link ViewAnnotation}.
    *
    * @param {Type} component
    * @param {Type} from

@@ -1,4 +1,4 @@
-import {Component, View, onAllChangesDone, Parent} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation, onAllChangesDone, Parent} from 'angular2/angular2';
 import {onDestroy, onChange} from 'angular2/src/core/annotations/annotations';
 import {ListWrapper} from 'angular2/src/facade/collection';
 import {isPresent, isString, NumberWrapper, stringify} from 'angular2/src/facade/lang';
@@ -6,7 +6,7 @@ import {PropertySetter} from 'angular2/src/core/annotations/di';
 
 // TODO(jelbourn): Set appropriate aria attributes for grid list elements.
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-grid-list',
   properties: {
     'cols': 'cols',
@@ -14,7 +14,7 @@ import {PropertySetter} from 'angular2/src/core/annotations/di';
   },
   lifecycle: [onChange]
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/grid_list/grid_list.html'
 })
 export class MdGridList {
@@ -166,7 +166,7 @@ export class MdGridList {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-grid-tile',
   properties: {
     'rowspan': 'rowspan',
@@ -174,7 +174,7 @@ export class MdGridList {
   },
   lifecycle: [onDestroy, onChange]
 })
-@View({
+@ViewAnnotation({
   template: `<figure><content></content></figure>`
 })
 export class MdGridTile {

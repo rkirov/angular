@@ -17,7 +17,7 @@ import {TestBed} from 'angular2/src/test_lib/test_bed';
 import {QueryList} from 'angular2/src/core/compiler/query_list';
 import {Query} from 'angular2/src/core/annotations/di';
 
-import {Decorator, Component, View, If, For} from 'angular2/angular2';
+import {DecoratorAnnotation, ComponentAnnotation, ViewAnnotation, If, For} from 'angular2/angular2';
 
 import {BrowserDomAdapter} from 'angular2/src/dom/browser_adapter';
 
@@ -83,8 +83,8 @@ export function main() {
   });
 }
 
-@Component({selector: 'needs-query'})
-@View({
+@ComponentAnnotation({selector: 'needs-query'})
+@ViewAnnotation({
   directives: [For],
   template: '<div *for="var dir of query">{{dir.text}}|</div>'
 })
@@ -97,7 +97,7 @@ class NeedsQuery {
 
 var _constructiontext = 0;
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[text]',
   properties: {
     'text': 'text'
@@ -108,8 +108,8 @@ class TextDirective {
   constructor() {}
 }
 
-@Component({selector: 'my-comp'})
-@View({
+@ComponentAnnotation({selector: 'my-comp'})
+@ViewAnnotation({
   directives: [NeedsQuery, TextDirective,  If, For]
 })
 class MyComp {

@@ -1,6 +1,6 @@
 import {Injectable, Injector} from 'angular2/di';
 import {Type, isPresent, BaseException, stringify} from 'angular2/src/facade/lang';
-import {Directive, Component} from '../annotations/annotations';
+import {DirectiveAnnotation, ComponentAnnotation} from '../annotations/annotations';
 import {DirectiveMetadata} from './directive_metadata';
 import {reflector} from 'angular2/src/reflection/reflection';
 
@@ -12,9 +12,9 @@ export class DirectiveMetadataReader {
       for (var i=0; i<annotations.length; i++) {
         var annotation = annotations[i];
 
-        if (annotation instanceof Directive) {
+        if (annotation instanceof DirectiveAnnotation) {
           var resolvedInjectables = null;
-          if (annotation instanceof Component && isPresent(annotation.injectables)) {
+          if (annotation instanceof ComponentAnnotation && isPresent(annotation.injectables)) {
             resolvedInjectables = Injector.resolve(annotation.injectables);
           }
           return new DirectiveMetadata(type, annotation, resolvedInjectables);

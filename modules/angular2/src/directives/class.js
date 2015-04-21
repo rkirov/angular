@@ -1,9 +1,9 @@
-import {Decorator} from 'angular2/src/core/annotations/annotations';
+import {DecoratorAnnotation} from 'angular2/src/core/annotations/annotations';
 import {isPresent} from 'angular2/src/facade/lang';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 import {NgElement} from 'angular2/src/core/compiler/ng_element';
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[class]',
   properties: {
     'iterableChanges': 'class | keyValDiff'

@@ -1,4 +1,4 @@
-import {bootstrap, Component, View} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 
 import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 
@@ -213,10 +213,10 @@ class CellData {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'app'
 })
-@View({
+@ViewAnnotation({
   directives: [LargetableComponent],
   template: `<largetable [data]='data' [benchmarkType]='benchmarkType'></largetable>`
 })
@@ -225,14 +225,14 @@ class AppComponent {
   benchmarkType:string;
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'largetable',
   properties: {
       'data': 'data',
       'benchmarkType': 'benchmarktype'
   }
 })
-@View({
+@ViewAnnotation({
   directives: [For, Switch, SwitchWhen, SwitchDefault],
   template: `
       <table [switch]="benchmarkType">

@@ -4,11 +4,11 @@ import {Promise, PromiseWrapper} from 'angular2/src/facade/async';
 import {List, ListWrapper, Map, MapWrapper} from 'angular2/src/facade/collection';
 
 import {DirectiveMetadataReader} from './directive_metadata_reader';
-import {Component, Viewport, DynamicComponent, Decorator} from '../annotations/annotations';
+import {ComponentAnnotation, ViewportAnnotation, DynamicComponentAnnotation, DecoratorAnnotation} from '../annotations/annotations';
 import {AppProtoView} from './view';
 import {DirectiveBinding} from './element_injector';
 import {TemplateResolver} from './template_resolver';
-import {View} from '../annotations/view';
+import {ViewAnnotation} from '../annotations/view';
 import {ComponentUrlMapper} from './component_url_mapper';
 import {ProtoViewFactory} from './proto_view_factory';
 import {UrlResolver} from 'angular2/src/services/url_resolver';
@@ -158,7 +158,7 @@ export class Compiler {
       };
       var nestedCall = null;
       if (isPresent(nestedComponent)) {
-        if (!(nestedComponent.annotation instanceof DynamicComponent)) {
+        if (!(nestedComponent.annotation instanceof DynamicComponentAnnotation)) {
           nestedCall = this._compile(nestedComponent);
         }
       } else if (isPresent(nestedRenderProtoView)) {
@@ -215,11 +215,11 @@ export class Compiler {
     var ann = directiveBinding.annotation;
     var renderType;
     var compileChildren = true;
-    if ((ann instanceof Component) || (ann instanceof DynamicComponent)) {
+    if ((ann instanceof ComponentAnnotation) || (ann instanceof DynamicComponentAnnotation)) {
       renderType = renderApi.DirectiveMetadata.COMPONENT_TYPE;
-    } else if (ann instanceof Viewport) {
+    } else if (ann instanceof ViewportAnnotation) {
       renderType = renderApi.DirectiveMetadata.VIEWPORT_TYPE;
-    } else if (ann instanceof Decorator) {
+    } else if (ann instanceof DecoratorAnnotation) {
       renderType = renderApi.DirectiveMetadata.DECORATOR_TYPE;
       compileChildren = ann.compileChildren;
     }
@@ -245,7 +245,7 @@ export class Compiler {
     });
   }
 
-  _flattenDirectives(template: View):List<Type> {
+  _flattenDirectives(template: ViewAnnotation):List<Type> {
     if (isBlank(template.directives)) return [];
 
     var directives = [];

@@ -1,4 +1,4 @@
-import {Viewport} from 'angular2/src/core/annotations/annotations';
+import {ViewportAnnotation} from 'angular2/src/core/annotations/annotations';
 import {ViewContainer} from 'angular2/src/core/compiler/view_container';
 import {AppView} from 'angular2/src/core/compiler/view';
 import {isPresent, isBlank} from 'angular2/src/facade/lang';
@@ -36,7 +36,7 @@ import {ListWrapper} from 'angular2/src/facade/collection';
  *
  * @exportedAs angular2/directives
  */
-@Viewport({
+@ViewportAnnotation({
   selector: '[for][of]',
   properties: {
     'iterableChanges': 'of | iterableDiff'

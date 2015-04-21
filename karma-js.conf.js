@@ -22,6 +22,7 @@ module.exports = function(config) {
       'node_modules/rx/dist/rx.all.js',
       'node_modules/zone.js/zone.js',
       'node_modules/zone.js/long-stack-trace-zone.js',
+      'node_modules/reflect-metadata/Reflect.js',
 
       'tools/build/file2modulename.js',
       'test-main.js'

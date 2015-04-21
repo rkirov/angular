@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 import {ListWrapper, MapWrapper} from 'angular2/src/facade/collection';
 import {Company, Opportunity, Offering, Account, CustomDate, STATUS_LIST}
     from './common';
@@ -16,14 +16,14 @@ export class HasStyle {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'company-name',
   properties: {
     'width': 'cell-width',
     'company': 'company'
   }
 })
-@View({
+@ViewAnnotation({
     directives: [],
     template: `<div [style]="style">{{company.name}}</div>`
 })
@@ -31,14 +31,14 @@ export class CompanyNameComponent extends HasStyle {
   company:Company;
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'opportunity-name',
   properties: {
     'width': 'cell-width',
     'opportunity': 'opportunity'
   }
 })
-@View({
+@ViewAnnotation({
     directives: [],
     template: `<div [style]="style">{{opportunity.name}}</div>`
 })
@@ -46,14 +46,14 @@ export class OpportunityNameComponent extends HasStyle {
   opportunity:Opportunity;
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'offering-name',
   properties: {
     'width': 'cell-width',
     'offering': 'offering'
   }
 })
-@View({
+@ViewAnnotation({
     directives: [],
     template: `<div [style]="style">{{offering.name}}</div>`
 })
@@ -68,14 +68,14 @@ export class Stage {
   apply:Function;
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'stage-buttons',
   properties: {
     'width': 'cell-width',
     'offering': 'offering'
   }
 })
-@View({
+@ViewAnnotation({
     directives: [For],
     template: `
       <div [style]="style">
@@ -127,14 +127,14 @@ export class StageButtonsComponent extends HasStyle {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'account-cell',
   properties: {
     'width': 'cell-width',
     'account': 'account'
   }
 })
-@View({
+@ViewAnnotation({
     directives: [],
     template: `
       <div [style]="style">
@@ -147,14 +147,14 @@ export class AccountCellComponent extends HasStyle {
   account:Account;
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'formatted-cell',
   properties: {
     'width': 'cell-width',
     'value': 'value'
   }
 })
-@View({
+@ViewAnnotation({
     directives: [],
     template: `<div [style]="style">{{formattedValue}}</div>`
 })

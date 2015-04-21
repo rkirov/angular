@@ -1,4 +1,4 @@
-import {Viewport} from 'angular2/src/core/annotations/annotations';
+import {ViewportAnnotation} from 'angular2/src/core/annotations/annotations';
 import {ViewContainer} from 'angular2/src/core/compiler/view_container';
 import {isBlank} from 'angular2/src/facade/lang';
 
@@ -25,7 +25,7 @@ import {isBlank} from 'angular2/src/facade/lang';
  *
  * @exportedAs angular2/directives
  */
-@Viewport({
+@ViewportAnnotation({
   selector: '[if]',
   properties: {
     'condition': 'if'

@@ -5,7 +5,7 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:angular2/src/test_lib/benchmark_util.dart';
 
-@Component(
+@ComponentAnnotation(
     selector: 'scroll-app',
     template: '''
     <div>

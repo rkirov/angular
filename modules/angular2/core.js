@@ -7,6 +7,7 @@
 export * from './src/core/annotations/visibility';
 export * from './src/core/compiler/interfaces';
 export * from './src/core/annotations/view';
+export * from './src/core/annotations/decorators';
 export * from './src/core/application';
 export * from './src/core/application_tokens';
 export * from './src/core/annotations/di';

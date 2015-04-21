@@ -1,9 +1,9 @@
-import {Component, View, Attribute, PropertySetter} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation, Attribute, PropertySetter} from 'angular2/angular2';
 import {isPresent} from 'angular2/src/facade/lang';
 import {KEY_SPACE} from 'angular2_material/src/core/constants'
 import {KeyboardEvent} from 'angular2/src/facade/browser';
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-checkbox',
   properties: {
     'checked': 'checked',
@@ -13,7 +13,7 @@ import {KeyboardEvent} from 'angular2/src/facade/browser';
     'keydown': 'onKeydown($event)'
   }
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/checkbox/checkbox.html',
   directives: []
 })

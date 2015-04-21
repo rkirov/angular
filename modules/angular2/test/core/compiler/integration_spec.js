@@ -24,8 +24,8 @@ import {Injector, bind} from 'angular2/di';
 import {PipeRegistry, defaultPipeRegistry,
   ChangeDetection, DynamicChangeDetection, Pipe, ChangeDetectorRef, ON_PUSH} from 'angular2/change_detection';
 
-import {Decorator, Component, Viewport, DynamicComponent} from 'angular2/src/core/annotations/annotations';
-import {View} from 'angular2/src/core/annotations/view';
+import {DecoratorAnnotation, ComponentAnnotation, ViewportAnnotation, DynamicComponentAnnotation} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 import {Parent, Ancestor} from 'angular2/src/core/annotations/visibility';
 import {Attribute} from 'angular2/src/core/annotations/di';
 
@@ -47,7 +47,7 @@ export function main() {
 
     describe('react to record changes', function() {
       it('should consume text node changes', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<div>{{ctxProp}}</div>'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<div>{{ctxProp}}</div>'}));
         tb.createView(MyComp, {context: ctx}).then((view) => {
           ctx.ctxProp = 'Hello World!';
 
@@ -58,7 +58,7 @@ export function main() {
       }));
 
       it('should consume element binding changes', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<div [id]="ctxProp"></div>'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<div [id]="ctxProp"></div>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -71,7 +71,7 @@ export function main() {
       }));
 
       it('should consume binding to aria-* attributes', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<div [attr.aria-label]="ctxProp"></div>'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<div [attr.aria-label]="ctxProp"></div>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -88,7 +88,7 @@ export function main() {
       }));
 
       it('should consume binding to property names where attr name and property name do not match', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<div [tabindex]="ctxNumProp"></div>'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<div [tabindex]="ctxNumProp"></div>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -104,7 +104,7 @@ export function main() {
       }));
 
       it('should consume binding to camel-cased properties using dash-cased syntax in templates', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<input [read-only]="ctxBoolProp">'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<input [read-only]="ctxBoolProp">'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -120,7 +120,7 @@ export function main() {
       }));
 
       it('should consume binding to inner-html', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<div inner-html="{{ctxProp}}"></div>'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<div inner-html="{{ctxProp}}"></div>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -137,7 +137,7 @@ export function main() {
       }));
 
       it('should ignore bindings to unknown properties', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({template: '<div unknown="{{ctxProp}}"></div>'}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: '<div unknown="{{ctxProp}}"></div>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -157,7 +157,7 @@ export function main() {
             '<div my-dir elprop="Hi {{\'there!\'}}"></div>' +
             '<div my-dir elprop="One more {{ctxProp}}"></div>' +
           '</div>'
-        tb.overrideView(MyComp, new View({template: tpl, directives: [MyDir]}));
+        tb.overrideView(MyComp, new ViewAnnotation({template: tpl, directives: [MyDir]}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
 
@@ -184,7 +184,7 @@ export function main() {
 
         it("should support pipes in bindings and bind config", inject([TestBed, AsyncTestCompleter], (tb, async) => {
           tb.overrideView(MyComp,
-            new View({
+            new ViewAnnotation({
               template: '<component-with-pipes #comp [prop]="ctxProp | double"></component-with-pipes>',
               directives: [ComponentWithPipes]
             }));
@@ -204,7 +204,7 @@ export function main() {
       });
 
       it('should support nested components.', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<child-cmp></child-cmp>',
           directives: [ChildComp]
         }));
@@ -221,7 +221,7 @@ export function main() {
       // GH issue 328 - https://github.com/angular/angular/issues/328
       it('should support different directive types on a single node', inject([TestBed, AsyncTestCompleter], (tb, async) => {
         tb.overrideView(MyComp,
-          new View({
+          new ViewAnnotation({
             template: '<child-cmp my-dir [elprop]="ctxProp"></child-cmp>',
             directives: [MyDir, ChildComp]
           }));
@@ -241,7 +241,7 @@ export function main() {
 
       it('should support directives where a binding attribute is not given', inject([TestBed, AsyncTestCompleter], (tb, async) => {
         tb.overrideView(MyComp,
-          new View({
+          new ViewAnnotation({
             // No attribute "el-prop" specified.
             template: '<p my-dir></p>',
             directives: [MyDir]
@@ -254,7 +254,7 @@ export function main() {
 
       it('should support directives where a selector matches property binding', inject([TestBed, AsyncTestCompleter], (tb, async) => {
         tb.overrideView(MyComp,
-          new View({
+          new ViewAnnotation({
             template: '<p [id]="ctxProp"></p>',
             directives: [IdComponent]
           }));
@@ -277,7 +277,7 @@ export function main() {
 
       it('should support template directives via `<template>` elements.', inject([TestBed, AsyncTestCompleter], (tb, async) => {
         tb.overrideView(MyComp,
-          new View({
+          new ViewAnnotation({
             template: '<div><template some-viewport var-greeting="some-tmpl"><copy-me>{{greeting}}</copy-me></template></div>',
             directives: [SomeViewport]
           }));
@@ -296,7 +296,7 @@ export function main() {
       }));
 
       it('should support template directives via `template` attribute.', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<div><copy-me template="some-viewport: var greeting=some-tmpl">{{greeting}}</copy-me></div>',
           directives: [SomeViewport]
         }));
@@ -314,7 +314,7 @@ export function main() {
       }));
 
       it('should assign the component instance to a var-', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<p><child-cmp var-alice></child-cmp></p>',
           directives: [ChildComp]
         }));
@@ -329,7 +329,7 @@ export function main() {
       }));
 
       it('should assign two component instances each with a var-', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<p><child-cmp var-alice></child-cmp><child-cmp var-bob></p>',
           directives: [ChildComp]
         }));
@@ -346,7 +346,7 @@ export function main() {
       }));
 
       it('should assign the component instance to a var- with shorthand syntax', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<child-cmp #alice></child-cmp>',
           directives: [ChildComp]
         }));
@@ -362,7 +362,7 @@ export function main() {
 
       it('should assign the element instance to a user-defined variable', inject([TestBed, AsyncTestCompleter], (tb, async) => {
         tb.overrideView(MyComp,
-          new View({template: '<p><div var-alice><i>Hello</i></div></p>'}));
+          new ViewAnnotation({template: '<p><div var-alice><i>Hello</i></div></p>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
           expect(view.rawView.locals).not.toBe(null);
@@ -378,7 +378,7 @@ export function main() {
 
       it('should assign the element instance to a user-defined variable with camelCase using dash-case', inject([TestBed, AsyncTestCompleter], (tb, async) => {
         tb.overrideView(MyComp,
-          new View({template: '<p><div var-super-alice><i>Hello</i></div></p>'}));
+          new ViewAnnotation({template: '<p><div var-super-alice><i>Hello</i></div></p>'}));
 
         tb.createView(MyComp, {context: ctx}).then((view) => {
           expect(view.rawView.locals).not.toBe(null);
@@ -395,7 +395,7 @@ export function main() {
         it("should use ChangeDetectorRef to manually request a check",
           inject([TestBed, AsyncTestCompleter], (tb, async) => {
 
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<push-cmp-with-ref #cmp></push-cmp-with-ref>',
             directives: [[[PushCmpWithRef]]]
           }));
@@ -421,7 +421,7 @@ export function main() {
         it("should be checked when its bindings got updated",
           inject([TestBed, AsyncTestCompleter], (tb, async) => {
 
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<push-cmp [prop]="ctxProp" #cmp></push-cmp>',
             directives: [[[PushCmp]]]
           }));
@@ -442,7 +442,7 @@ export function main() {
         }));
 
         it('should not affect updating properties on the component', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<push-cmp-with-ref [prop]="ctxProp" #cmp></push-cmp-with-ref>',
             directives: [[[PushCmpWithRef]]]
           }));
@@ -465,7 +465,7 @@ export function main() {
       });
 
       it('should create a component that injects a @Parent', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<some-directive><cmp-with-parent #child></cmp-with-parent></some-directive>',
           directives: [SomeDirective, CompWithParent]
         }));
@@ -480,7 +480,7 @@ export function main() {
       }));
 
       it('should create a component that injects an @Ancestor', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: `
             <some-directive>
               <p>
@@ -500,7 +500,7 @@ export function main() {
       }));
 
       it('should create a component that injects an @Ancestor through viewport directive', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: `
             <some-directive>
               <p *if="true">
@@ -522,7 +522,7 @@ export function main() {
       }));
 
       it('should support events via EventEmitter', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<div emitter listener></div>',
           directives: [DecoratorEmitingEvent, DecoratorListeningEvent]
         }));
@@ -546,7 +546,7 @@ export function main() {
       }));
 
       it('should support render events', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<div listener></div>',
           directives: [DecoratorListeningDomEvent]
         }));
@@ -566,7 +566,7 @@ export function main() {
       }));
 
       it('should support render global events', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<div listener></div>',
           directives: [DecoratorListeningDomEvent]
         }));
@@ -593,7 +593,7 @@ export function main() {
 
       if (DOM.supportsDOMEvents()) {
         it('should support preventing default on render events', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<input type="checkbox" listenerprevent></input><input type="checkbox" listenernoprevent></input>',
             directives: [DecoratorListeningDomEventPrevent, DecoratorListeningDomEventNoPrevent]
           }));
@@ -611,7 +611,7 @@ export function main() {
       }
 
       it('should support render global events from multiple directives', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<div *if="ctxBoolProp" listener listenerother></div>',
           directives: [If, DecoratorListeningDomEvent, DecoratorListeningDomEventOther]
         }));
@@ -648,7 +648,7 @@ export function main() {
 
         it('should allow to create a ViewContainer at any bound location',
             inject([TestBed, AsyncTestCompleter, Compiler], (tb, async, compiler) => {
-          tb.overrideView(MyComp, new View({
+          tb.overrideView(MyComp, new ViewAnnotation({
             template: '<div><dynamic-vp #dynamic></dynamic-vp></div>',
             directives: [DynamicViewport]
           }));
@@ -666,7 +666,7 @@ export function main() {
       });
 
       it('should support static attributes', inject([TestBed, AsyncTestCompleter], (tb, async) => {
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<input static type="text" title>',
           directives: [NeedsAttribute]
         }));
@@ -687,7 +687,7 @@ export function main() {
       it('should specify a location of an error that happened during change detection (text)',
         inject([TestBed, AsyncTestCompleter], (tb, async) => {
 
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '{{a.b}}'
         }));
 
@@ -700,7 +700,7 @@ export function main() {
       it('should specify a location of an error that happened during change detection (element property)',
         inject([TestBed, AsyncTestCompleter], (tb, async) => {
 
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<div [prop]="a.b"></div>'
         }));
 
@@ -713,7 +713,7 @@ export function main() {
       it('should specify a location of an error that happened during change detection (directive property)',
         inject([TestBed, AsyncTestCompleter], (tb, async) => {
 
-        tb.overrideView(MyComp, new View({
+        tb.overrideView(MyComp, new ViewAnnotation({
           template: '<child-cmp [prop]="a.b"></child-cmp>',
           directives: [ChildComp]
         }));
@@ -727,7 +727,7 @@ export function main() {
 
     it('should support imperative views',
         inject([TestBed, AsyncTestCompleter], (tb, async) => {
-      tb.overrideView(MyComp, new View({
+      tb.overrideView(MyComp, new ViewAnnotation({
         template: '<simple-imp-cmp></simple-imp-cmp>',
         directives: [SimpleImperativeViewComponent]
       }));
@@ -745,7 +745,7 @@ export function main() {
       if (assertionsEnabled()) {
 
         function expectCompileError(tb, inlineTpl, errMessage, done) {
-          tb.overrideView(MyComp, new View({template: inlineTpl}));
+          tb.overrideView(MyComp, new ViewAnnotation({template: inlineTpl}));
           PromiseWrapper.then(tb.createView(MyComp),
             (value) => {
               throw new BaseException("Test failure: should not have come here as an exception was expected");
@@ -798,10 +798,10 @@ export function main() {
   });
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'simple-imp-cmp'
 })
-@View({
+@ViewAnnotation({
   renderer: 'simple-imp-cmp-renderer'
 })
 class SimpleImperativeViewComponent {
@@ -813,7 +813,7 @@ class SimpleImperativeViewComponent {
 }
 
 
-@Decorator({
+@DecoratorAnnotation({
   selector: 'dynamic-vp'
 })
 class DynamicViewport {
@@ -827,7 +827,7 @@ class DynamicViewport {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[my-dir]',
   properties: {'dirProp':'elprop'}
 })
@@ -838,14 +838,14 @@ class MyDir {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'push-cmp',
   properties: {
     'prop': 'prop'
   },
   changeDetection:ON_PUSH
 })
-@View({template: '{{field}}'})
+@ViewAnnotation({template: '{{field}}'})
 class PushCmp {
   numberOfChecks:number;
   prop;
@@ -860,14 +860,14 @@ class PushCmp {
   }
 }
 
- @Component({
+ @ComponentAnnotation({
   selector: 'push-cmp-with-ref',
   properties: {
     'prop': 'prop'
   },
   changeDetection:ON_PUSH
 })
-@View({template: '{{field}}'})
+@ViewAnnotation({template: '{{field}}'})
 class PushCmpWithRef {
   numberOfChecks:number;
   ref:ChangeDetectorRef;
@@ -888,8 +888,8 @@ class PushCmpWithRef {
   }
 }
 
-@Component()
-@View({directives: [
+@ComponentAnnotation()
+@ViewAnnotation({directives: [
 ]})
 class MyComp {
   ctxProp:string;
@@ -903,24 +903,24 @@ class MyComp {
 }
 
 
-@Component({
+@ComponentAnnotation({
   selector: 'component-with-pipes',
   properties: {
     "prop": "prop | double"
   }
 })
-@View({
+@ViewAnnotation({
   template: ''
 })
 class ComponentWithPipes {
   prop:string;
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'child-cmp',
   injectables: [MyService],
 })
-@View({
+@ViewAnnotation({
   directives: [MyDir],
   template: '{{ctxProp}}'
 })
@@ -933,10 +933,10 @@ class ChildComp {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'child-cmp-svc'
 })
-@View({
+@ViewAnnotation({
   template: '{{ctxProp}}'
 })
 class ChildCompUsingService {
@@ -946,15 +946,15 @@ class ChildCompUsingService {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: 'some-directive'
 })
 class SomeDirective { }
 
-@Component({
+@ComponentAnnotation({
   selector: 'cmp-with-parent'
 })
-@View({
+@ViewAnnotation({
   template: '<p>Component with an injected parent</p>',
   directives: [SomeDirective]
 })
@@ -965,10 +965,10 @@ class CompWithParent {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'cmp-with-ancestor'
 })
-@View({
+@ViewAnnotation({
   template: '<p>Component with an injected ancestor</p>',
   directives: [SomeDirective]
 })
@@ -979,7 +979,7 @@ class CompWithAncestor {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: '[child-cmp2]',
   injectables: [MyService]
 })
@@ -992,7 +992,7 @@ class ChildComp2 {
   }
 }
 
-@Viewport({
+@ViewportAnnotation({
   selector: '[some-viewport]'
 })
 class SomeViewport {
@@ -1029,7 +1029,7 @@ class DoublePipeFactory {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[emitter]',
   events: ['event']
 })
@@ -1047,7 +1047,7 @@ class DecoratorEmitingEvent {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[listener]',
   hostListeners: {'event': 'onEvent($event)'}
 })
@@ -1063,7 +1063,7 @@ class DecoratorListeningEvent {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[listener]',
   hostListeners: {
     'domEvent': 'onEvent($event.type)',
@@ -1092,7 +1092,7 @@ class DecoratorListeningDomEvent {
 }
 
 var globalCounter = 0;
-@Decorator({
+@DecoratorAnnotation({
   selector: '[listenerother]',
   hostListeners: {
     'window:domEvent': 'onEvent($event.type)'
@@ -1110,7 +1110,7 @@ class DecoratorListeningDomEventOther {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[listenerprevent]',
   hostListeners: {
     'click': 'onEvent($event)'
@@ -1122,7 +1122,7 @@ class DecoratorListeningDomEventPrevent {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[listenernoprevent]',
   hostListeners: {
     'click': 'onEvent($event)'
@@ -1134,18 +1134,18 @@ class DecoratorListeningDomEventNoPrevent {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: '[id]',
   properties: {'id': 'id'}
 })
-@View({
+@ViewAnnotation({
   template: '<div>Matched on id with {{id}}</div>'
 })
 class IdComponent {
   id: string;
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[static]'
 })
 class NeedsAttribute {

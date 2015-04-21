@@ -32,7 +32,7 @@ import {ABSTRACT, CONST, Type} from 'angular2/src/facade/lang';
  *
  * @exportedAs angular2/annotations
  */
-export class View {
+export class ViewAnnotation {
   /**
    * Specifies a template URL for an angular component.
    *

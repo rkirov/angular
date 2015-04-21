@@ -12,8 +12,8 @@ import {
 } from 'angular2/test_lib';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 
-import {Decorator, Component} from 'angular2/src/core/annotations/annotations';
-import {View} from 'angular2/src/core/annotations/view';
+import {DecoratorAnnotation, ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 
 import {NgElement} from 'angular2/src/core/compiler/ng_element';
 
@@ -54,8 +54,8 @@ export function main() {
   })
 }
 
-@Component({selector: 'test-cmp'})
-@View({directives: [NonBindable, TestDecorator]})
+@ComponentAnnotation({selector: 'test-cmp'})
+@ViewAnnotation({directives: [NonBindable, TestDecorator]})
 class TestComponent {
   text: string;
   constructor() {
@@ -63,7 +63,7 @@ class TestComponent {
   }
 }
 
-@Decorator({
+@DecoratorAnnotation({
   selector: '[test-dec]'
 })
 class TestDecorator {

@@ -164,7 +164,7 @@ export function main() {
           process(
             el('<div some-vp></div>')
           );
-        }).toThrowError('Viewport directives need to be placed on <template> elements or elements with template attribute - check ' 
+        }).toThrowError('Viewport directives need to be placed on <template> elements or elements with template attribute - check '
           + (assertionsEnabled() ? '<div some-vp>' : 'null'));
       });
     });

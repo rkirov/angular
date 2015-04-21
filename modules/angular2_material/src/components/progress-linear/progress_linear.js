@@ -1,8 +1,8 @@
-import {Component, View, Attribute, PropertySetter, onChange} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation, Attribute, PropertySetter, onChange} from 'angular2/angular2';
 import {isPresent, isBlank} from 'angular2/src/facade/lang';
 import {Math} from 'angular2/src/facade/math';
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-progress-linear',
   lifecycle: [onChange],
   properties: {
@@ -10,7 +10,7 @@ import {Math} from 'angular2/src/facade/math';
     'bufferValue': 'buffer-value'
   }
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/progress-linear/progress_linear.html',
   directives: []
 })

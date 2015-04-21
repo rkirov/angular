@@ -1,4 +1,4 @@
-import {bootstrap, Component, Viewport, View, ViewContainer, Compiler, NgElement, Decorator} from 'angular2/angular2';
+import {bootstrap, ComponentAnnotation, Viewport, ViewAnnotation, ViewContainer, Compiler, NgElement, DecoratorAnnotation} from 'angular2/angular2';
 
 import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 import {reflector} from 'angular2/src/reflection/reflection';
@@ -222,8 +222,8 @@ class BaseLineIf {
   }
 }
 
-@Component({selector: 'app'})
-@View({
+@ComponentAnnotation({selector: 'app'})
+@ViewAnnotation({
   directives: [TreeComponent],
   template: `<tree [data]='initData'></tree>`
 })
@@ -236,11 +236,11 @@ class AppComponent {
   }
 }
 
-@Component({
+@ComponentAnnotation({
   selector: 'tree',
   properties: {'data': 'data'}
 })
-@View({
+@ViewAnnotation({
   directives: [TreeComponent, If],
   template: `<span> {{data.value}} <span template='if data.right != null'><tree [data]='data.right'></tree></span><span template='if data.left != null'><tree [data]='data.left'></tree></span></span>`
 })

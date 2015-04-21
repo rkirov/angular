@@ -1,13 +1,13 @@
 import {Map, MapWrapper, ListWrapper} from 'angular2/src/facade/collection';
 import {Type, isPresent, BaseException, stringify, isBlank} from 'angular2/src/facade/lang';
 
-import {View} from 'angular2/src/core/annotations/view';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 import {TemplateResolver} from 'angular2/src/core/compiler/template_resolver';
 
 export class MockTemplateResolver extends TemplateResolver {
-  _templates: Map<Type, View>;
+  _templates: Map<Type, ViewAnnotation>;
   _inlineTemplates: Map<Type, string>;
-  _templateCache: Map<Type, View>;
+  _templateCache: Map<Type, ViewAnnotation>;
   _directiveOverrides: Map<Type, Type>;
 
   constructor() {
@@ -19,12 +19,12 @@ export class MockTemplateResolver extends TemplateResolver {
   }
 
   /**
-   * Overrides the {@link View} for a component.
+   * Overrides the {@link ViewAnnotation} for a component.
    *
    * @param {Type} component
    * @param {ViewDefinition} view
    */
-  setView(component: Type, view: View): void {
+  setView(component: Type, view: ViewAnnotation): void {
     this._checkOverrideable(component);
     MapWrapper.set(this._templates, component, view);
   }
@@ -41,7 +41,7 @@ export class MockTemplateResolver extends TemplateResolver {
   }
 
   /**
-   * Overrides a directive from the component {@link View}.
+   * Overrides a directive from the component {@link ViewAnnotation}.
    *
    * @param {Type} component
    * @param {Type} from
@@ -61,16 +61,16 @@ export class MockTemplateResolver extends TemplateResolver {
   }
 
   /**
-   * Returns the {@link View} for a component:
-   * - Set the {@link View} to the overridden template when it exists or fallback to the default `TemplateResolver`,
+   * Returns the {@link ViewAnnotation} for a component:
+   * - Set the {@link ViewAnnotation} to the overridden template when it exists or fallback to the default `TemplateResolver`,
    *   see `setView`.
    * - Override the directives, see `overrideTemplateDirective`.
-   * - Override the @View definition, see `setInlineTemplate`.
+   * - Override the @ViewAnnotation definition, see `setInlineTemplate`.
    *
    * @param component
    * @returns {ViewDefinition}
    */
-  resolve(component: Type): View {
+  resolve(component: Type): ViewAnnotation {
     var view = MapWrapper.get(this._templateCache, component);
     if (isPresent(view)) return view;
 
@@ -91,7 +91,7 @@ export class MockTemplateResolver extends TemplateResolver {
         }
         directives[srcIndex] = to;
       });
-      view = new View({
+      view = new ViewAnnotation({
         template: view.template,
         templateUrl: view.templateUrl,
         directives: directives
@@ -100,7 +100,7 @@ export class MockTemplateResolver extends TemplateResolver {
 
     var inlineTemplate = MapWrapper.get(this._inlineTemplates, component);
     if (isPresent(inlineTemplate)) {
-      view = new View({
+      view = new ViewAnnotation({
         template: inlineTemplate,
         templateUrl: null,
         directives: view.directives

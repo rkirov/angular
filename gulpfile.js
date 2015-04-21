@@ -63,6 +63,7 @@ var _HTML_DEFAULT_SCRIPTS_JS = [
   {src: 'node_modules/systemjs/lib/extension-register.js', mimeType: 'text/javascript', copy: true},
   {src: 'node_modules/systemjs/lib/extension-cjs.js', mimeType: 'text/javascript', copy: true},
   {src: 'node_modules/rx/dist/rx.all.js', mimeType: 'text/javascript', copy: true},
+  {src: 'node_modules/reflect-metadata/Reflect.js', mimeType: 'text/javascript', copy: true},
   {src: 'tools/build/snippets/runtime_paths.js', mimeType: 'text/javascript', copy: true},
   {
     inline: 'System.import(\'$MODULENAME$\').then(function(m) { m.main(); }, console.error.bind(console))',
@@ -650,10 +651,11 @@ gulp.task('bundle.js.min.deps', ['bundle.js.min'], function() {
       .pipe(gulp.dest('dist/bundle'));
 });
 
-var JS_DEV_DEPS = ['node_modules/zone.js/zone.js', 'node_modules/zone.js/long-stack-trace-zone.js'];
+var JS_DEV_DEPS = ['node_modules/zone.js/zone.js', 'node_modules/zone.js/long-stack-trace-zone.js', 'node_modules/reflect-metadata/Reflect.js'];
 
 gulp.task('bundle.js.dev.deps', ['bundle.js.dev'], function() {
   return bundler.modify(JS_DEV_DEPS.concat(['dist/build/angular2.dev.js']), 'angular2.dev.js')
+      .pipe(insert.append('\nSystem.config("paths":{"*":"*.js","angular2/*":"angular2/*"});\n'))
       .pipe(insert.append('\nzone = zone.fork(Zone.longStackTraceZone);\n'))
       .pipe(gulp.dest('dist/bundle'));
 });

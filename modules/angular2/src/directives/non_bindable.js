@@ -1,4 +1,4 @@
-import {Decorator} from 'angular2/src/core/annotations/annotations';
+import {DecoratorAnnotation} from 'angular2/src/core/annotations/annotations';
 
 /**
  * The `NonBindable` directive tells Angular not to compile or bind the contents of the current
@@ -15,7 +15,7 @@ import {Decorator} from 'angular2/src/core/annotations/annotations';
  *
  * @exportedAs angular2/directives
  */
-@Decorator({
+@DecoratorAnnotation({
   selector: '[non-bindable]',
   compileChildren: false
 })

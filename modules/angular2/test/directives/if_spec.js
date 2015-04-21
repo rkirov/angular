@@ -16,8 +16,8 @@ import {DOM} from 'angular2/src/dom/dom_adapter';
 
 import {TestBed} from 'angular2/src/test_lib/test_bed';
 
-import {Component} from 'angular2/src/core/annotations/annotations';
-import {View} from 'angular2/src/core/annotations/view';
+import {ComponentAnnotation} from 'angular2/src/core/annotations/annotations';
+import {ViewAnnotation} from 'angular2/src/core/annotations/view';
 
 import {If} from 'angular2/src/directives/if';
 
@@ -182,8 +182,8 @@ export function main() {
   });
 }
 
-@Component({selector: 'test-cmp'})
-@View({directives: [If]})
+@ComponentAnnotation({selector: 'test-cmp'})
+@ViewAnnotation({directives: [If]})
 class TestComponent {
   booleanCondition: boolean;
   nestedBooleanCondition: boolean;

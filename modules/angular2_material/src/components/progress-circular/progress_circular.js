@@ -1,9 +1,9 @@
-import {Component, View} from 'angular2/angular2';
+import {ComponentAnnotation, ViewAnnotation} from 'angular2/angular2';
 
-@Component({
+@ComponentAnnotation({
   selector: 'md-progress-circular'
 })
-@View({
+@ViewAnnotation({
   templateUrl: 'angular2_material/src/components/progress-circular/progress_circular.html'
 })
 export class MdProgressCircular {
