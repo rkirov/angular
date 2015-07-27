@@ -355,13 +355,15 @@ export function main() {
                  view.detectChanges();
 
                  expect(q.query.length).toBe(0);
+                 expect(q.changed).toEqual(0);
 
-                 q.show = true;
+               q.show = true;
                  view.detectChanges();
 
                  expect(q.query.first.text).toEqual("1");
+                 expect(q.changed).toEqual(1);
 
-                 async.done();
+               async.done();
                });
          }));
 
@@ -477,9 +479,12 @@ class NeedsViewQueryDesc {
 class NeedsViewQueryIf {
   show: boolean;
   query: QueryList<TextDirective>;
+  changed: number;
   constructor(@ViewQuery(TextDirective) query: QueryList<TextDirective>) {
     this.query = query;
     this.show = false;
+    this.changed = 0;
+    this.query.onChange(() => {this.changed += 1})
   }
 }
 
